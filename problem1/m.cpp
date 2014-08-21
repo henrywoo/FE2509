@@ -8,7 +8,7 @@ using namespace std;
 
 const int ITERNUM = 1e7;
 
-void test(){
+void firstSimulation(){
   time_t t1 = time(NULL);
 
   std::random_device rd;
@@ -26,15 +26,15 @@ void test(){
         break;
       }
     }
-    if (i % 1000001 == 10000){
+    /*if (i % 1000001 == 10000){
       printf("%.5f\t", (1.0*j) / i);
-    }
+    }*/
   }
   time_t t2 = time(NULL);
-  printf("%.5f\ntime:%ld", (1.0*j) / ITERNUM, (t2 - t1));
+  printf("%.5f\ntime:%ld\n", (1.0*j) / ITERNUM, (t2 - t1));
 }
 
-void test2(){
+void secondSimulation(){
   double initialprincipal = 1e6;
 
   vector<double*> vvd;
@@ -63,6 +63,7 @@ void test2(){
 }
 
 int main(int argc, char* argv[]){
-  test2();
+  firstSimulation();
+  secondSimulation();
   return 0;
 }
