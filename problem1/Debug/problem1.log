@@ -1,0 +1,3 @@
+﻿  m.cpp
+c:\gdrive\nus\fe5209-financial ecometrics\_src\problem1\m.cpp(9): warning C4244: 'initializing' : conversion from 'double' to 'const int', possible loss of data
+  problem1.vcxproj -> C:\gdrive\NUS\FE5209-financial ecometrics\_src\problem1\Debug\problem1.exe

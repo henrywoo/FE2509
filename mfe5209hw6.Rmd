@@ -1,0 +1,109 @@
+---
+title: "MFE5209HW6 - Value At Risk"
+author: "Wu Fuheng"
+date: "Tuesday, October 07, 2014"
+output: html_document
+---
+
+## Problem 1
+
+>__Suppose the risk measure $R$ is $VaR(\alpha)$ for some $\alpha$. Let $P_1$ and $P_2$ be
+>two portfolios whose returns have a joint normal distribution with means
+>$\mu_1$ and $\mu_2$, standard deviations $\sigma_1$ and $\sigma_2$, and correlation $\rho$. Suppose the
+>initial investments are $S_1$ and $S_2$. Show that $R(P_1+P_2) \leq R(P_1)+R(P_2)$.__
+
+----
+
+We know for correlated normal random variables $P_1$ and $P_2$, their summation is also a normal distribution, which has mean equal to $P_1$ + $P_2$, standard deviation equal to $\sigma=\sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\rho\sigma_1 \sigma_2}$.
+
+We also know the inverse cumulative distribution function of a normal distribution N($\mu,\sigma$) is
+
+$$\begin{align*}
+F^{-1}(p)
+&= \mu + \sigma \sqrt{2} erf^{-1}(2p-1), p\in (0,1)
+\end{align*}$$
+
+So we have
+$$\begin{align*}
+R(P_1+P_2)
+&= VaR(P_1+P_2)\\
+&= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\rho\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2p-1)\\
+\end{align*}$$
+
+where $1-p$ is the confidence level.
+
+We also have
+
+$$\begin{align*}
+R(P_1)+R(P_2)
+&= VaR(P_1)+VaR(P_2)\\
+&= S_1 + \sigma_1  \sqrt{2} erf^{-1}(2p-1) + S_2 + \sigma_2  \sqrt{2} erf^{-1}(2p-1)\\
+&= S_1 + S_2 + (\sigma_1 + \sigma_2)  \sqrt{2} erf^{-1}(2p-1)\\
+&= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2p-1)\\
+\end{align*}$$
+
+Because $\rho \in [0,1]$, comparing the two formula above, we can draw a conculsion
+$$\begin{align*}
+R(P_1+P_2) \leq R(P_1)+R(P_2)
+\end{align*}$$
+
+Reference Link: [Sum of normally distributed random variables](http://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables)
+
+----
+
+## Problem 2
+
+>__Consider  daily stock price  data  in the  file Stock_FX_Bond.csv. Use only the 
+>first 500 prices on each  stock.  The following R code reads the  data and 
+>extracts the  first  500 prices for five stocks. "AC" in the variables' names 
+>means "adjusted closing" price.__
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+dat = read.csv("Rlab9_Stock_FX_Bond.csv" ,header=T)
+prices = as.matrix(dat[1:500,c(3,5,7,9,11)])
+```
+
+>__(a) What are the sample mean vector and sample covariance matrix  of the 
+>499 returns on these stocks?__
+
+```{r message=FALSE, warning=FALSE}
+r=diff(prices,1)
+smv = colMeans(r)
+ecm = var(r)
+cat("sample mean vector is as follows:")
+smv
+cat("sample covariance matrix is as follows:")
+ecm
+```
+
+>__(b) How many shares of each stock should one buy to invest $50 million in an 
+>equally weighted portfolio? Use the prices at the end of the series, e.g., prices[
+>500,]__.
+
+To invest $50 million in an equally weighted portfolio means to invest $10 million to each stocks.
+So the respective share number for each stock is as follows:
+
+```{r message=FALSE, warning=FALSE}
+S=50000000
+floor(S/5/prices[500,])
+```
+
+>__(c) What is the one-day VaR(0.1) for this equally weighted  portfolio?  Use a 
+>parametric VaR assuming normality.__
+
+```{r message=FALSE, warning=FALSE}
+w=matrix(rep(0.2,5))
+m=smv %*% w
+sigma=sqrt(t(w) %*% ecm %*% w)
+# -S*(m+qnorm(0.1) *sigma) # the same result
+var1day=-S*qnorm(0.1, mean = m,sd = sigma)
+var1day
+```
+
+>__(d)  What is the five-day  VaR(0.1) for this portfolio? Use a parametric VaR 
+>assuming normality. You can assume that the daily returns are uncorrelated.__
+
+```{r message=FALSE, warning=FALSE}
+var5day=-S*qnorm(0.1, mean = 5*m,sd = sqrt(5)*sigma)
+var5day
+```

@@ -1,0 +1,5 @@
+﻿  m.cpp
+m.cpp(9): warning C4244: 'initializing' : conversion from 'double' to 'const int', possible loss of data
+  Generating code
+  Finished generating code
+  problem1.vcxproj -> C:\gdrive\NUS\FE5209-financial ecometrics\_src\problem1\Release\problem1.exe

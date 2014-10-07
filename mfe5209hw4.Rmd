@@ -1,0 +1,145 @@
+---
+title: "MFE5209 Homework 5 Answer Sheet"
+author: "Wu Fuheng"
+date: "Monday, October 06, 2014"
+output: html_document
+---
+## Problem 1
+This is a AR(1)/ARCH(1) model, the conditional mean and variance of $u_t$ will be __non-constant__.
+
+Since $\mu=0.4, \phi=0.45, \omega=1$ and $a_1=0.3$, we can rewrite the equation of $u_t$ as follows:
+
+$$\begin{align*}
+u_t 
+&=(1-\phi)\mu + \phi u_{t-1} + h_t\\
+&=(1-0.45)0.4+0.45 u_{t-1}+h_t\\
+&=0.22+0.45 u_{t-1}+h_t\\
+\end{align*}$$
+
+----
+
+__a)__ The conditional mean of $u_t$ is
+
+$$\begin{align*}
+E[u_t|u_{t-1},...]
+&= 0.22+0.45u_{t-1}+E[h_t|h_{t-1}...]\\
+\end{align*}$$
+
+According to P479 of *SDAFE*, for a ARCH(1) process $h_t$, the conditional mean $E[h_t|h_{t-1}...]$=0. Thus we have
+
+$$\begin{align*}
+E[u_t|u_{t-1},...]
+&= 0.22+0.45u_{t-1}\\
+\end{align*}$$
+
+So,
+
+$$\begin{align*}
+E[u_2|u_1=1,u_0=0.2]
+&= 0.22+0.45u_1\\
+&=0.67
+\end{align*}$$
+
+__b)__The conditional variance of $u_t$ is
+$$\begin{align*}
+Var[u_t|u_{t-1},...]
+&= E[(u_t-E[u_t|u_{t-1},...])^2|u_{t-1},...]\\
+&= E[(h_t)^2|u_{t-1},...]\\
+&= \omega + \alpha_1 h_{t-1}^2\\
+\end{align*}$$
+
+Thus, we have
+$$\begin{align*}
+Var[u_2|u_1=1,u_0=0.2]
+&= \omega + \alpha_1 h_{1}^2\\
+&= 1 + 0.3 h_{1}^2\\
+\end{align*}$$
+
+---
+
+## Problem 2
+Assume $\beta_0=0.06, \beta_1=0.35, \delta=0.22$, we can rewrite the model
+
+$$\begin{align*}
+Y_t=0.06+0.35X_t+0.22\sigma_t+h_t
+\end{align*}$$
+
+----
+
+__a)__
+Conditional Expectation
+$$\begin{align*}
+E[Y_t|X_t=0.1,h_{t-1}=0.6]
+&=0.06+0.35*0.1+0.22\sigma_t\\
+&=0.095+0.22\sigma_t\\
+\end{align*}$$
+
+__b)__
+Conditional Variance
+$$\begin{align*}
+Var[Y_t|X_t=0.1,h_{t-1}=0.6]
+&=E[(Y_t-E[Y_t|X_t=0.1,h_{t-1}=0.6])^2|X_t=0.1,h_{t-1}=0.6]\\
+&=E[h_t^2|X_t=0.1,h_{t-1}=0.6]\\
+&=1+0.5h_{t-1}^2\\
+&=1+0.5*0.6^2\\
+&=1.18
+\end{align*}$$
+
+__c)__
+NA
+
+__d)__
+NA
+
+
+## Problem 3
+
+```{r  message=FALSE, warning=FALSE, results='hide'}
+library(fGarch)
+library(Ecdat)
+data(Irates)
+r = as.numeric(log(Irates[,2]))
+n = length(r)
+lagr = r[1:(n-1)]
+diffr = r[2:n] - lagr
+garchFit(~arma(1,0)+garch(1,1),data=diffr, cond.dist = "std")
+```
+
+__a)__
+The model is a AR(1)/GARCH(1,1) model, assuming a t-distributed errors. We are trying to use AR(1) to model the return conditional mean and GARCH(1,1) to model its conditional variance. We can write is mathematically as follows:
+
+$$\begin{align*}
+\Delta r_t=Y_t=\mu+ar_1 Y_{t-1}+a_t\\
+\\
+a_t=\varepsilon_t \sqrt{\omega + \alpha_1 a_{t-1}^2+ \beta_1 \sigma_{t-1}^2},  
+\varepsilon_t \thicksim t(.)
+\end{align*}$$
+
+In this case, the fitted model is:
+$$\begin{align}
+\Delta r_t=Y_t=0.00910873+0.09508060 Y_{t-1}+a_t\\
+\\
+a_t=\varepsilon_t \sqrt{0.00054864 + 0.32444019 a_{t-1}^2+ 0.74026870 \sigma_{t-1}^2}\\
+\\
+\varepsilon_t \thicksim t(2.83060758)
+\end{align}$$
+
+__b)__
+The estimates of the model parameters are as follows
+
+<PRE>
+Coefficient(s):
+         mu         ar1       omega      alpha1       beta1       shape  
+ 0.00910873  0.09508060  0.00054864  0.32444019  0.74026870  2.83060758  
+</PRE>
+
+__c)__
+
+
+__d)__
+
+
+__e)__
+
+
+

@@ -1,0 +1,27 @@
+\documentclass[a4paper]{article}
+
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+
+\title{Your Paper}
+
+\author{Wu Fuheng}
+
+\date{\today}
+
+\begin{document}
+
+We hope you find write\LaTeX\ useful, and please let us know if you have any feedback using the help menu above.
+
+<<kable, results="asis">>=
+n <- 100
+x <- rnorm(n)
+y <- 2*x + rnorm(n)
+out <- lm(y ~ x)
+kable(summary(out)$coef, digits=2)
+@
+
+\end{document}
