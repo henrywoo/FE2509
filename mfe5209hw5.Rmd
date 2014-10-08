@@ -1,5 +1,5 @@
 ---
-title: "MFE5209 Homework 5 Answer Sheet"
+title: "MFE5209 ARCH/GARCH"
 author: "Wu Fuheng"
 date: "Monday, October 06, 2014"
 output: html_document
@@ -7,7 +7,7 @@ output: html_document
 ## Problem 1
 This is a AR(1)/ARCH(1) model, the conditional mean and variance of $u_t$ will be __non-constant__.
 
-Since $\mu=0.4, \phi=0.45, \omega=1$ and $a_1=0.3$, we can rewrite the equation of $u_t$ as follows:
+Since $\mu=0.4, \phi=0.45, \omega=1$ and $\alpha_1=0.3$, we can rewrite the equation of $u_t$ as follows:
 
 $$\begin{align*}
 u_t 
@@ -18,7 +18,9 @@ u_t
 
 ----
 
-__a)__ The conditional mean of $u_t$ is
+>__a)__Conditional Expectation
+
+The conditional mean of $u_t$ is
 
 $$\begin{align*}
 E[u_t|u_{t-1},...]
@@ -40,7 +42,9 @@ E[u_2|u_1=1,u_0=0.2]
 &=0.67
 \end{align*}$$
 
-__b)__The conditional variance of $u_t$ is
+>__b)__Conditional Variance
+
+The conditional variance of $u_t$ is
 $$\begin{align*}
 Var[u_t|u_{t-1},...]
 &= E[(u_t-E[u_t|u_{t-1},...])^2|u_{t-1},...]\\
@@ -55,6 +59,15 @@ Var[u_2|u_1=1,u_0=0.2]
 &= 1 + 0.3 h_{1}^2\\
 \end{align*}$$
 
+And we also know
+$$\begin{align*}
+u_1-\mu=\phi (u_0 - \mu) + h_1\\
+\longrightarrow 1-0.4=0.45(0.2-0.4)+ h_1\\
+\longrightarrow h_1=0.51
+\end{align*}$$
+
+Therefore, $Var[u_2|u_1=1,u_0=0.2]=1+0.3*0.51^2=1.07803$
+
 ---
 
 ## Problem 2
@@ -66,16 +79,16 @@ Y_t=0.06+0.35X_t+0.22\sigma_t+h_t
 
 ----
 
-__a)__
-Conditional Expectation
+>__a)__Conditional Expectation
+
 $$\begin{align*}
 E[Y_t|X_t=0.1,h_{t-1}=0.6]
 &=0.06+0.35*0.1+0.22\sigma_t\\
 &=0.095+0.22\sigma_t\\
 \end{align*}$$
 
-__b)__
-Conditional Variance
+>__b)__Conditional Variance
+
 $$\begin{align*}
 Var[Y_t|X_t=0.1,h_{t-1}=0.6]
 &=E[(Y_t-E[Y_t|X_t=0.1,h_{t-1}=0.6])^2|X_t=0.1,h_{t-1}=0.6]\\
@@ -85,14 +98,24 @@ Var[Y_t|X_t=0.1,h_{t-1}=0.6]
 &=1.18
 \end{align*}$$
 
-__c)__
-NA
+>__c)__Is the conditional distribution of $Y_t$ given $X_t$ and $h_{t-1}$ normal? Why or why not?
 
-__d)__
-NA
+Yes, it is normal.
+Reason: There is only one stochastic item $\varepsilon$ in the formula which is normal. And we know the linear combination of a normal distribution is normal.
 
+>__d)__Is the marginal distribution of $Y_t$ normal? Why or why not?
+
+No, it isn't.
+Reason: In this case, $h_t$ is a ARCH(1) process, which is of a non-Gaussian distribution with a heavy tail. So $Y_t$ is also not Gaussian/normal.
+
+----
 
 ## Problem 3
+
+This problem uses monthly observations of the two-month yield, that is, $Y_T$ with T 
+equal to two months, in the data set Irates in the Ecdat package. The rates are 
+log-transformed to stabilize the variance. To fit a GARCH model to the changes in the 
+log rates, run the following R code.
 
 ```{r  message=FALSE, warning=FALSE, results='hide'}
 library(fGarch)
@@ -102,10 +125,11 @@ r = as.numeric(log(Irates[,2]))
 n = length(r)
 lagr = r[1:(n-1)]
 diffr = r[2:n] - lagr
-garchFit(~arma(1,0)+garch(1,1),data=diffr, cond.dist = "std")
+g=garchFit(~arma(1,0)+garch(1,1),data=diffr, cond.dist = "std")
 ```
 
-__a)__
+>__a)__ What model is being fit to the changes in $r$? Describe the model in detail.
+
 The model is a AR(1)/GARCH(1,1) model, assuming a t-distributed errors. We are trying to use AR(1) to model the return conditional mean and GARCH(1,1) to model its conditional variance. We can write is mathematically as follows:
 
 $$\begin{align*}
@@ -124,7 +148,13 @@ a_t=\varepsilon_t \sqrt{0.00054864 + 0.32444019 a_{t-1}^2+ 0.74026870 \sigma_{t-
 \varepsilon_t \thicksim t(2.83060758)
 \end{align}$$
 
-__b)__
+The details of the fitted model are as follows:
+```{r}
+summary(g)
+```
+
+>__b)__ What are the estimates of the parameters of the model?
+
 The estimates of the model parameters are as follows
 
 <PRE>
@@ -133,13 +163,24 @@ Coefficient(s):
  0.00910873  0.09508060  0.00054864  0.32444019  0.74026870  2.83060758  
 </PRE>
 
-__c)__
+>__c)__ What is the estimated ACF of $\Delta r_t$ ?
 
+```{r  message=FALSE, warning=FALSE}
+acf(diffr)
+```
 
-__d)__
+>__d)__ What is the estimated ACF of $a_t$ ?
 
+$a_t$ is uncorrelated, aka $ACF(a_t)=\rho_a(h)=0$ if $h\neq 0$.
+```{r  message=FALSE, warning=FALSE}
+acf(residuals(g))
+```
 
-__e)__
+>__e)__ What is the estimated ACF of ${a_t}^2$ ?
+
+```{r  message=FALSE, warning=FALSE}
+acf(residuals(g)^2)
+```
 
 
 
