@@ -26,20 +26,21 @@ F^{-1}(p)
 So we have
 $$\begin{align*}
 R(P_1+P_2)
-&= VaR(P_1+P_2)\\
-&= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\rho\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2p-1)\\
+&= VaR(\alpha)\\
+&= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\rho\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2\alpha-1)\\
 \end{align*}$$
 
-where $1-p$ is the confidence level.
+where $1-\alpha$ is the confidence level, erf(x) is defined as $erf(x)=\frac{2}{\sqrt \pi}\int_{0}^{x}e^{-t^2}dt$.
+
 
 We also have
 
 $$\begin{align*}
 R(P_1)+R(P_2)
-&= VaR(P_1)+VaR(P_2)\\
-&= S_1 + \sigma_1  \sqrt{2} erf^{-1}(2p-1) + S_2 + \sigma_2  \sqrt{2} erf^{-1}(2p-1)\\
-&= S_1 + S_2 + (\sigma_1 + \sigma_2)  \sqrt{2} erf^{-1}(2p-1)\\
-&= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2p-1)\\
+&= VaR_1(\alpha)+VaR_2(\alpha)\\
+&= [S_1 + \sigma_1  \sqrt{2} erf^{-1}(2\alpha-1)] + [S_2 + \sigma_2  \sqrt{2} erf^{-1}(2\alpha-1)]\\
+&= S_1 + S_2 + (\sigma_1 + \sigma_2)  \sqrt{2} erf^{-1}(2\alpha-1)\\
+&= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2\alpha-1)\\
 \end{align*}$$
 
 Because $\rho \in [0,1]$, comparing the two formula above, we can draw a conculsion
@@ -96,7 +97,7 @@ w=matrix(rep(0.2,5))
 m=smv %*% w
 sigma=sqrt(t(w) %*% ecm %*% w)
 # -S*(m+qnorm(0.1) *sigma) # the same result
-var1day=-S*qnorm(0.1, mean = m,sd = sigma)
+var1day=-S*qnorm(0.1, mean = m, sd = sigma)
 var1day
 ```
 
@@ -104,6 +105,6 @@ var1day
 >assuming normality. You can assume that the daily returns are uncorrelated.__
 
 ```{r message=FALSE, warning=FALSE}
-var5day=-S*qnorm(0.1, mean = 5*m,sd = sqrt(5)*sigma)
+var5day=-S*qnorm(0.1, mean = 5*m, sd = sqrt(5)*sigma)
 var5day
 ```

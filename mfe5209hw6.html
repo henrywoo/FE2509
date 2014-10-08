@@ -72,17 +72,17 @@ F^{-1}(p)
 \end{align*}\]</span></p>
 <p>So we have <span class="math">\[\begin{align*}
 R(P_1+P_2)
-&amp;= VaR(P_1+P_2)\\
-&amp;= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\rho\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2p-1)\\
+&amp;= VaR(\alpha)\\
+&amp;= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\rho\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2\alpha-1)\\
 \end{align*}\]</span></p>
-<p>where <span class="math">\(1-p\)</span> is the confidence level.</p>
+<p>where <span class="math">\(1-\alpha\)</span> is the confidence level, erf(x) is defined as <span class="math">\(erf(x)=\frac{2}{\sqrt \pi}\int_{0}^{x}e^{-t^2}dt\)</span>.</p>
 <p>We also have</p>
 <p><span class="math">\[\begin{align*}
 R(P_1)+R(P_2)
-&amp;= VaR(P_1)+VaR(P_2)\\
-&amp;= S_1 + \sigma_1  \sqrt{2} erf^{-1}(2p-1) + S_2 + \sigma_2  \sqrt{2} erf^{-1}(2p-1)\\
-&amp;= S_1 + S_2 + (\sigma_1 + \sigma_2)  \sqrt{2} erf^{-1}(2p-1)\\
-&amp;= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2p-1)\\
+&amp;= VaR_1(\alpha)+VaR_2(\alpha)\\
+&amp;= [S_1 + \sigma_1  \sqrt{2} erf^{-1}(2\alpha-1)] + [S_2 + \sigma_2  \sqrt{2} erf^{-1}(2\alpha-1)]\\
+&amp;= S_1 + S_2 + (\sigma_1 + \sigma_2)  \sqrt{2} erf^{-1}(2\alpha-1)\\
+&amp;= S_1 + S_2 + \sqrt{ \sigma_{1}^2 + \sigma_{2}^2 + 2\sigma_1 \sigma_2}  \sqrt{2} erf^{-1}(2\alpha-1)\\
 \end{align*}\]</span></p>
 <p>Because <span class="math">\(\rho \in [0,1]\)</span>, comparing the two formula above, we can draw a conculsion <span class="math">\[\begin{align*}
 R(P_1+P_2) \leq R(P_1)+R(P_2)
@@ -132,13 +132,13 @@ floor(S/5/prices[500,])</code></pre>
 m=smv %*% w
 sigma=sqrt(t(w) %*% ecm %*% w)
 # -S*(m+qnorm(0.1) *sigma) # the same result
-var1day=-S*qnorm(0.1, mean = m,sd = sigma)
+var1day=-S*qnorm(0.1, mean = m, sd = sigma)
 var1day</code></pre>
 <pre><code>## [1] 6098984</code></pre>
 <blockquote>
 <p><strong>(d) What is the five-day VaR(0.1) for this portfolio? Use a parametric VaR assuming normality. You can assume that the daily returns are uncorrelated.</strong></p>
 </blockquote>
-<pre class="r"><code>var5day=-S*qnorm(0.1, mean = 5*m,sd = sqrt(5)*sigma)
+<pre class="r"><code>var5day=-S*qnorm(0.1, mean = 5*m, sd = sqrt(5)*sigma)
 var5day</code></pre>
 <pre><code>## [1] 13023473</code></pre>
 </div>
