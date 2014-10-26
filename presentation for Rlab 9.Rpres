@@ -1,0 +1,173 @@
+MFE5209 Presentation (Rlab 9)
+========================================================
+#width: 1920
+#height: 1080
+width: 1536
+height: 864
+author:Wu Fuheng,  Rui Dai, Ou Jin, Meng Weiran, Hao Sijia
+date: Oct 25, 2014
+font-family: 'consolas'
+transition: rotate
+autosize: true
+css: rlab9.css
+
+>
+> - (Multi)Cointegration
+> - VECM
+>
+
+<img src="http://www.rmi.nus.edu.sg/_images/rmilogo_27June2013.jpg" class="imgCenter" border=0/>
+
+Code for Question 1
+========================================================
+css: rlab9.css
+
+```{r , eval=FALSE}
+if (!"fEcofin" %in% rownames(installed.packages())){
+  install.packages("fEcofin", repos="http://R-Forge.R-project.org")
+}
+if (!"urca" %in% rownames(installed.packages())){
+  install.packages("urca", repos="http://R-Forge.R-project.org")
+}
+library(fEcofin)
+library(urca)
+midcapD.ts=read.csv("8_midcapD.ts.csv",
+                    header=T,sep=";")
+x = midcapD.ts[,2:11]
+prices= exp(apply(x,2,cumsum))
+options(digits=3)
+summary(ca.jo(prices))
+```
+
+<img src="http://tstotopix.files.wordpress.com/2014/01/tapped_out_question_mark.png?w=96&h=94" class="imgRight" border=0/>
+
+Question 1
+========================================================
+```
+In this case, regardless of whether one uses a 1%, 5%, or 10% level test, one suggest that no cointegration vector should exist.
+```
+
+<img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/375px-Simpsons_FamilyPicture.png" class="imgLeft" border=0/>
+
+Code for Question 2-4
+========================================================
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+library(fEcofin)
+library(urca)
+mk.maturity=read.csv("8_mk.maturity.csv",header=T)
+mk.maturity[2:11,]
+mk.zero2=read.csv("8_mk.zero2.csv",header=T,sep=";")
+res = ca.jo(mk.zero2[,2:11])
+summary(res)
+#plotres(res)
+```
+
+Question 2
+========================================================
+
+- **We choose maturities from mk.maturity(from row 2 to row 11), and they are 0.083, 0.167, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833.**
+
+- **They are short-term maturities.**
+
+Question 3
+========================================================
+
+From the summary, one accepts that r is less than or equal to 4 but rejects that r is less than or equal to 3, so one concludes that r = 4. And 4 cointegration vectors were found using 1% level test.
+
+Problem 4 - Which trading strategy do you recommend?
+========================================================
+Pairs Trading
+
+
+
+
+
+
+
+
+
+Problem Set 2
+========================================================
+css: rlab9.css
+Consider the monthly yields of Moody's seasoned corporate Aaa and Baa bonds from July 1954 to February 2005 for 609 observations. The data m-bnd.txt were obtained from Federal Reserve Bank of St. Louis.
+
+```{r , eval=FALSE}
+library("fUnitRoots")
+library("urca")
+library("MTS")
+
+da=read.table("m-bnd.txt")
+bnd=da[,4:5]
+colnames(bnd) <- c("Aaa","Baa")
+adfTest(bnd[,1],lags=3,type="c") #Augmented Dickey-Fuller Test
+adfTest(bnd[,2],lags=2,type="c")
+m1=VARorder(bnd)
+m2=ca.jo(bnd,K=2,ecdet=c("none"))
+summary(m2)
+```
+
+
+Problem 5 - Are the bond yields stationary? Justify using the augmented DickyFuller unit root test.
+========================================================
+css: rlab9.css
+
+<hr size=1>
+
+```{r , echo=FALSE, results='hide'}
+library("fUnitRoots")
+library("urca")
+library("MTS")
+```
+
+- 1. MTSplot to observe any cointegration pattern
+
+```{r quickPlot, fig.align='center'}
+da=read.table("m-bnd.txt")
+bnd=da[,4:5]
+#Figure shows the time plots of the bond yields. As expected, the two series move in a parallel manner.
+MTSplot(bnd)
+```
+
+- 2. Augmented Dickey-Fuller Test with $H_0$: $\beta = 0$ -> Unit Root Non Stationary
+
+```{r echo=TRUE}
+#The augmented Dickey-Fuller unit-root test confirms that the two bond yields are unit-root nonstationary.
+colnames(bnd) <- c("Aaa","Baa")
+adfTest(bnd[,1],lags=3,type="c")
+adfTest(bnd[,2],lags=2,type="c")
+```
+
+
+Problem 6
+========================================================
+css: rlab9.css
+
+> Q: Choose an VAR model to fit the data. Specify the order using the information criteria.
+
+
+```{r echo=TRUE}
+m1=VARorder(bnd)
+```
+
+> A: The order p=3 is selected by both BIC and HQ. Therefore, we employ a VAR(3) model in the cointegration test.
+
+Problem 7
+========================================================
+css: rlab9.css
+
+> Q: Conduct cointegration test
+
+```{r}
+m2=ca.jo(bnd,K=2,ecdet=c("none"))
+summary(m2)
+```
+
+> A: Compared with critical values, we rejectr=0, but cannot rejectr=1. Therefore, the $\Pi$ matrix of ECM is of rank 1 and there is a cointegrating vector.
+
+Problem 8 -  Propose a trading strategy
+========================================================
+css: rlab9.css
+
+
+Pairs Trading

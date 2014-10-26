@@ -1,0 +1,28 @@
+body {
+    background-image: url("bkg.png");
+	background-repeat: repeat;
+	background-size: 100% auto;
+}
+
+	
+
+.imgRight{
+  position:fixed;
+  bottom:0;
+  right:0;
+  z-index:100; /* or higher/lower depending on other elements */
+}
+
+.imgLeft{
+  position:fixed;
+  bottom:0;
+  Left:0;
+  z-index:100; /* or higher/lower depending on other elements */
+}
+
+.imgCenter{
+  position:fixed;
+  bottom:0;
+  /*right:50%;*/
+  z-index:100; /* or higher/lower depending on other elements */
+}

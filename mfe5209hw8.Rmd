@@ -1,0 +1,55 @@
+---
+title: "mfe5209hw8"
+author: "Wu Fuheng"
+date: "Saturday, October 11, 2014"
+output: html_document
+---
+
+>There are 1352 yield curves in the data, so you will see a representative sample of them. The yield 
+>curves change slowly, which is why one should look at yield curves that are spaced rather far (100 days) apart.
+
+```{r message=FALSE, warning=FALSE}
+yieldDat = read.table("9_treasury_yields.txt",header=T)
+maturity = c((0:5),5.5,6.5,7.5,8.5,9.5)
+pairs(yieldDat)
+par(mfrow=c(4,3))
+for (i in 0:11){
+  plot(maturity,yieldDat[100*i+1,],type="b")
+}
+```
+
+>Next compute the eigenvalues and eigenvectors of the sample covariance matrix, print the results, 
+and plot the eigenvalues as a scree plot.
+
+```{r message=FALSE, warning=FALSE}
+eig = eigen(cov(yieldDat))
+eig$values
+eig$vectors
+par(mfrow=c(1,1))
+barplot(eig$values)
+The following R code plots the first four eigenvectors.
+par(mfrow=c(2,2))
+plot(eig$vector[,1],ylim=c(-.7,.7),type="b")
+abline(h=0)
+plot(eig$vector[,2],ylim=c(-.7,.7),type="b")
+abline(h=0)
+plot(eig$vector[,3],ylim=c(-.7,.7),type="b")
+abline(h=0)
+plot(eig$vector[,4],ylim=c(-.7,.7),type="b")
+abline(h=0)
+```
+
+>1.  It is generally recommended that PCA be applied to time series that are stationary. Plot the 
+>first column of yieldDat. (You can look at other columns as well. You will see that they are 
+>fairly similar.) Does the plot appear stationary? Why or why not? Include your plot with your work.
+
+>Another way to check for stationarity is to run the augmented Dickey-Fuller test. You can do that 
+>with the following code:
+
+```{r}
+library("tseries")
+adf.test(yieldDat[,1])
+```
+
+>2.  Based on the augmented Dickey-Fuller test, do you think the first column of yieldDat is 
+>stationary? Why or why not?

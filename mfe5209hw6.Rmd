@@ -1,12 +1,14 @@
 ---
-title: "MFE5209HW6 - Value At Risk"
-author: "Wu Fuheng"
+title: "MFE5209 HomeWork 6 - Value At Risk"
+author: Wu Fuheng(A0095704B),Hao Sijia(A0132383L),Ou jing(A0132334U),Dai Rui(A0132308R),Meng
+  WeiRan(A0109899E)
 date: "Tuesday, October 07, 2014"
 output: html_document
 ---
 
 ## Problem 1
 
+#####Author: Ou jing(A0132334U), Hao Sijia(A0132383L), Wu Fuheng(A0095704B)
 >__Suppose the risk measure $R$ is $VaR(\alpha)$ for some $\alpha$. Let $P_1$ and $P_2$ be
 >two portfolios whose returns have a joint normal distribution with means
 >$\mu_1$ and $\mu_2$, standard deviations $\sigma_1$ and $\sigma_2$, and correlation $\rho$. Suppose the
@@ -48,12 +50,10 @@ $$\begin{align*}
 R(P_1+P_2) \leq R(P_1)+R(P_2)
 \end{align*}$$
 
-Reference Link: [Sum of normally distributed random variables](http://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables)
-
 ----
 
 ## Problem 2
-
+#####Author: Meng WeiRan(A0109899E), Dai Rui(A0132308R)
 >__Consider  daily stock price  data  in the  file Stock_FX_Bond.csv. Use only the 
 >first 500 prices on each  stock.  The following R code reads the  data and 
 >extracts the  first  500 prices for five stocks. "AC" in the variables' names 
@@ -108,3 +108,14 @@ var1day
 var5day=-S*qnorm(0.1, mean = 5*m, sd = sqrt(5)*sigma)
 var5day
 ```
+
+>__Reference:__
+
+>1. [Sum of normally distributed random variables](http://en.wikipedia.org/wiki/Sum_of_normally_distributed_random_variables)
+
+>2. [Statistics and Data Analysis for Financial Engineering](http://www.springer.com/statistics/business,+economics+%26+finance/book/978-1-4419-7786-1)
+
+---
+<center>
+![logo](http://www.rmi.nus.edu.sg/_images/rmilogo_27June2013.jpg "NUS MFE")
+</center>

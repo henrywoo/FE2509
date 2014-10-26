@@ -1,0 +1,89 @@
+---
+title: "MFE5209 Vector AutoRegressive"
+author: "Wu Fuheng"
+date: "Wednesday, October 08, 2014"
+output: html_document
+---
+
+## Problem 1
+
+>__a)__
+
+```{r message=FALSE, warning=FALSE}
+library(MTS)
+C=matrix(c(0.8,-0.3,0.4,0.6), nrow = 2)
+S=matrix(c(2,0.5,0.5,1.0), nrow = 2)
+m1 = VARMAsim(300, arlags = c(1), phi = C, sigma = S)
+yt = m1$series
+plot(yt)
+```
+
+>__b)__
+
+```{r message=FALSE, warning=FALSE}
+ccm(yt, lags = 5)
+```
+
+>__c)__
+
+```{r message=FALSE, warning=FALSE}
+mq(yt, lag=10)
+```
+
+We can see all p-value is 0, so we can reject $H_0$ of no cross-correlations with 5% significance level.
+
+>__d)__
+
+```{r message=FALSE, warning=FALSE}
+m2 = VARMAsim(200,malags = c(1),theta = C,sigma = S);
+zt = m2$series
+ccm(zt, lags = 2)
+mq(zt, lag=10)
+```
+
+
+## Problem 2
+>The file q-fdebt.txt contains the U.S. quarterly federal debts held by (a)foreign and 
+>international investors, (b) federal reserve banks, and (c) the public.The data are 
+>from the Federal Reserve Bank of St. Louis, from 1970 to 2012 for 171 
+>observations, and not seasonally adjusted. The debts are in billions of dollars. 
+>Take the log transformation and the first difference for each time series. Let zt be 
+>the differenced log series.
+
+>__a)__ Plot the time series $z_t$.
+
+```{r message=FALSE, warning=FALSE}
+library(MTS)
+da=read.table("q-fdebt.txt",header=T)
+debt=log(da[,3:5])
+tdx=da[,1]+da[,2]/12
+#MTSplot(debt,tdx);
+zt=diffM(debt);
+MTSplot(zt,tdx[-1])
+```
+
+>__b)__ Obtain the first five lags of sample CCMs of $z_t$.
+
+```{r message=FALSE, warning=FALSE}
+ccm(zt, lags = 5)
+```
+
+>__c)__ Use a VAR model to fit the data $z_t$, with an appropriate order selection. Justify your order choice. Interpret the fitted model.
+
+```{r message=FALSE, warning=FALSE}
+VARorder(zt)
+```
+
+
+```{r message=FALSE, warning=FALSE}
+v=VAR(zt,p=6)
+```
+
+>__d)__ Is the fitted model adequate? Draw the conclusion using the 5% significance level.
+
+```{r message=FALSE, warning=FALSE}
+resi=v$residuals
+mq(resi,adj=18)
+```
+
+

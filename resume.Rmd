@@ -1,0 +1,103 @@
+---
+title: "Fuheng Wu"
+author: "Email:wufuheng@gmail.com"
+date: "Mobile: +65 97799130"
+output: html_document
+---
+
+----
+
+###1. Summary
+
+* 12 years’ experience in C++ in Windows/Linux
+* Hands-on experienced in Agile, Pair, TDD programming
+* IKM C++ Programming Test: 96 out of 100 (2013July)
+* Sun Certified Java Programmer (SCJP): 89 out of 100 (2003)
+
+###2. Industry Experience
+
+> Senior Software Engineer at Accellion Pte. Ltd. (C++/C, Python)                                             12/13 – , Palo Alto, CA, USA/SG
+
+•  Accellion is a Silicon Valley startup focusing on enterprise software for mobile file sharing. I was a developer of the flagship product Kiteworks.
+
+•	Develop python virtual machine (https://github.com/henrywoo/Python275/tree/pydynamic) with c which execute python byte code directly; Develop Enterprise Connect Module, Data Migration Module with Python
+
+•	Integrate SmartOffice with Kiteworks(Android/iOS platforms); SmartOffice WindowsPhone 8.1 Development 
+
+> Trading System Engineer at Millennium Capital Management (C++, Python/R/Perl, MySQL)                    02/12 – 09/13, SG
+
+•	Monitor and improve in-house algorithmic trading system; Monitor and develop real time monitoring system
+
+•	Manage an automated equities and futures trading system which has a daily trading volume of 10+ billion USD
+
+•	Design and develop monitoring system for the trading system with Perl, Python and R, and provide patches for the trading system with C++ via CVS through RT Ticket system; DataSource: Bloomberg, Reuters Feed handler; MarketData: Wombat MAMA/openmama; Messaging: tibco rvd
+
+•	As company trading representative in equity and equity index futures, manually reconcile trade between WorldQuant and Millennium(daily), trade stale position stocks, hedge FX exposure(weekly)
+
+•	Work with portfolio managers on daily trading, like strategy setup/decommission, parameters tuning, strategy monitoring (fill rate, PnL), manual trade and PNL reconciliation(daily)
+
+•	Interview and coach new recruit
+
+> Application Architect and Developer 3 at Credit Suisse AG (C#, Oracle, Sybase ASE)                                    05/11-10/11, SG
+
+•	Developer of LOCuS (http://www.csfb.com/locus), a historic and live Fixed Income/Bond data analysis software
+
+•	Develop independently Constant Maturity Bond Yield Calculator and GBP/USD, EUR/USD and CHF/USD Basis Swap Calculator with C#; extend functionality of Swaption Volatility Calculator by adding additional expiry periods. All the work above involves interacting with Sybase and MSSQL Server 2005 Locus database, access to MDS (Market Data Server) which is a Credit Suisse proprietary industry standard market database for fixed rate series, yield series etc, and GMAG library, a model used for asset pricing and trade risk management.
+
+•	Develop Locus Server Process Memory Checking tools Memchk.exe with C#, and a rsync-like Locus Server Data transfer tool with Python and a data series abnormal spike detection tool with Python.
+
+> Senior Software System Developer at Borland Software Corp. (Versant DB, C++, COM, CORBA)                07/05-12/10, SG
+
+•	Core developer of CaliberRM, an enterprise level Requirements Management tool, which had been developed 10+ years and had 1.5+ million lines C++ code, 500,000 lines C# code and 400,000 lines Java code. 
+
+•	Implement Agile programming, pair programming in our team and host daily standup meeting as a scrum master; Complete several SDLC like CaliberRM DB Migration Project, CaliberRM 2006, CaliberRM 2008 WW
+
+•	Tackle with myriad of CaliberRM escalation cases and contribute lots of patches/hot fixes for CaliberRM 2005, 2006, 2008 and Worldwide Version. Actively took part, as one of the main code contributors, in CaliberRM R&D, where my focus is Database - the Achilles heel of CaliberRM. Chief coder of Database Migration Tool of CaliberRM 2009 and CaliberRM Database Verification Tool for CaliberRM 2006 and 2008.
+
+•	Daily developing language: C++; developing tool: Visual Studio 6/2003/2005. 
+
+
+> Senior Software Engineer at NetEase Inc. (NTES) (C++, J2EE, Linux, LVS, Lustre, Java, Python)              05/04-04/05, China
+
+•	Project manager of NetEase POPO online game outsourcing; System architect of NetEase WebUnion System, a six million advertising system like Google AdSense. (150+ million pageview per day, url: http://union.163.com)
+
+•	Finish almost the whole WebUnion system coding except JavaScript programming. I used JSP for the front-end dynamic web portal, PHP for backend management portal, Python and Perl for Linux cluster system management, data processing and MySQL database interaction. For our Linux Cluster, which consists of about 20 Dell 1850 machines, I employed Apache+ Java1.5+ Resin3.0.8+ PHP4.3.10+ Squid2.5.STABLE9 architecture in Red Hat Linux Enterprise Advanced Server update 3.0. I recompiled kernel and optimized it for best networking performance. I also did some hacking for Apache, Squid and Resin. For example, I developed our own apache module with C, wrote redirector program for squid which can cache URL containing question mark, and configured special Java Virtual Machine parameters for Resin.
+
+###3. Academic Education
+
+> Singapore-MIT Alliance ( http://web.mit.edu/SMA/ ) 06/2002 – 06/2003, SG, Boston MA USA
+
+  Master on High Performance Computation for Engineered System	GRE Quant 800/800,Verbal:680/800
+  
+•	Course: Numerical Algorithms on Advanced Computer Architectures; Optimization Methods; Numerical Methods for PDE; Optimization and Computation; Computing Technology and Tools; Numerical Linear Algebra
+
+•	Thesis: Audio lossless compression algorithm
+
+•	Others: Old time’s picture in MIT; On 2003, the Singapore President S.R Nathan himself conferred me Master of Science degree from National University of Singapore and master level Certificate from Singapore-MIT Alliance.
+
+> Beijing University of Aero& Astro(http://ev.buaa.edu.cn/about ) 09/1998 – 07/2002, Beijing, China
+
+  Bachelor of Engineering on Electrical Engineering	First Class Honors; Top 5% in 250+
+  
+•	Internship/Projects: FYP - Neural network and genetic algorithm implementation on Permanent Magnetic Electrical Motor design; Summer Session Project - Qinghai-Tibet Railway Oxygen Supply System
+
+###4. Hobbies - Open Source Involvement
+
+> Google Code
+
+BunnyOS - An OS written with pure assembly language nasm (http://code.google.com/p/bunnyos/)
+
+•	Currently BunnyOS is able to realize multiprocess, ring3 system call, and rudimentary keyboard and monitor interface.	2011
+UltraIE - Yet another IE add-on (http://code.google.com/p/ultraie )
+
+•	Service Side: ICE3.3.0, PHP, MYSQL, Apache, Pureftp, Lucene; Client Side: WTL8.0, FFMPEG, LAME, PCRE, SQLite3	2006
+
+ChinaLAMP - http://sourceforge.net/projects/chinalamp/
+
+•	My first open source project, though the source code has been lost and only a screenshot left	2005
+
+> GitHub - https://github.com/henrywoo 
+
+Various Different Network Server Models with Python (Reactor / Proactor / Blocking / Non-Blocking / Multiplexing / Event-Driven / Process Pool): https://github.com/henrywoo/Network-Server-With-Python
+
+Home-Made Algorithms in C++, including frequently-used algorithms and some seldom-used like Hidden Markov Model, Binary Index Tree: https://github.com/henrywoo/Algo

@@ -4,7 +4,9 @@ author: "Wu Fuheng"
 date: "Monday, October 06, 2014"
 output: html_document
 ---
-## Problem 1
+### Problem 1
+> EMAIL: [Wu Fuheng(a0095704@nus.edu.sg)](http://rpubs.com/wujucong/32751)
+
 This is a AR(1)/ARCH(1) model, the conditional mean and variance of $u_t$ will be __non-constant__.
 
 Since $\mu=0.4, \phi=0.45, \omega=1$ and $\alpha_1=0.3$, we can rewrite the equation of $u_t$ as follows:
@@ -63,14 +65,14 @@ And we also know
 $$\begin{align*}
 u_1-\mu=\phi (u_0 - \mu) + h_1\\
 \longrightarrow 1-0.4=0.45(0.2-0.4)+ h_1\\
-\longrightarrow h_1=0.51
+\longrightarrow h_1=0.6+0.45 \times 0.2=0.69
 \end{align*}$$
 
-Therefore, $Var[u_2|u_1=1,u_0=0.2]=1+0.3*0.51^2=1.07803$
+Therefore, $Var[u_2|u_1=1,u_0=0.2]=1+0.3 \times 0.69^2=1.14283$
 
 ---
 
-## Problem 2
+### Problem 2
 Assume $\beta_0=0.06, \beta_1=0.35, \delta=0.22$, we can rewrite the model
 
 $$\begin{align*}
@@ -110,7 +112,7 @@ Reason: In this case, $h_t$ is a ARCH(1) process, which is of a non-Gaussian dis
 
 ----
 
-## Problem 3
+### Problem 3
 
 This problem uses monthly observations of the two-month yield, that is, $Y_T$ with T 
 equal to two months, in the data set Irates in the Ecdat package. The rates are 

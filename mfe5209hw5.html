@@ -58,8 +58,11 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 </div>
 
 
-<div id="problem-1" class="section level2">
-<h2>Problem 1</h2>
+<div id="problem-1" class="section level3">
+<h3>Problem 1</h3>
+<blockquote>
+<p>EMAIL: <a href="http://rpubs.com/wujucong/32751">Wu Fuheng(<a href="mailto:a0095704@nus.edu.sg">a0095704@nus.edu.sg</a>)</a></p>
+</blockquote>
 <p>This is a AR(1)/ARCH(1) model, the conditional mean and variance of <span class="math">\(u_t\)</span> will be <strong>non-constant</strong>.</p>
 <p>Since <span class="math">\(\mu=0.4, \phi=0.45, \omega=1\)</span> and <span class="math">\(\alpha_1=0.3\)</span>, we can rewrite the equation of <span class="math">\(u_t\)</span> as follows:</p>
 <p><span class="math">\[\begin{align*}
@@ -105,13 +108,13 @@ Var[u_2|u_1=1,u_0=0.2]
 <p>And we also know <span class="math">\[\begin{align*}
 u_1-\mu=\phi (u_0 - \mu) + h_1\\
 \longrightarrow 1-0.4=0.45(0.2-0.4)+ h_1\\
-\longrightarrow h_1=0.51
+\longrightarrow h_1=0.6+0.45 \times 0.2=0.69
 \end{align*}\]</span></p>
-<p>Therefore, <span class="math">\(Var[u_2|u_1=1,u_0=0.2]=1+0.3*0.51^2=1.07803\)</span></p>
+<p>Therefore, <span class="math">\(Var[u_2|u_1=1,u_0=0.2]=1+0.3 \times 0.69^2=1.14283\)</span></p>
 <hr />
 </div>
-<div id="problem-2" class="section level2">
-<h2>Problem 2</h2>
+<div id="problem-2" class="section level3">
+<h3>Problem 2</h3>
 <p>Assume <span class="math">\(\beta_0=0.06, \beta_1=0.35, \delta=0.22\)</span>, we can rewrite the model</p>
 <p><span class="math">\[\begin{align*}
 Y_t=0.06+0.35X_t+0.22\sigma_t+h_t
@@ -146,8 +149,8 @@ Var[Y_t|X_t=0.1,h_{t-1}=0.6]
 <p>No, it isn’t. Reason: In this case, <span class="math">\(h_t\)</span> is a ARCH(1) process, which is of a non-Gaussian distribution with a heavy tail. So <span class="math">\(Y_t\)</span> is also not Gaussian/normal.</p>
 <hr />
 </div>
-<div id="problem-3" class="section level2">
-<h2>Problem 3</h2>
+<div id="problem-3" class="section level3">
+<h3>Problem 3</h3>
 <p>This problem uses monthly observations of the two-month yield, that is, <span class="math">\(Y_T\)</span> with T equal to two months, in the data set Irates in the Ecdat package. The rates are log-transformed to stabilize the variance. To fit a GARCH model to the changes in the log rates, run the following R code.</p>
 <pre class="r"><code>library(fGarch)
 library(Ecdat)
@@ -185,7 +188,7 @@ a_t=\varepsilon_t \sqrt{0.00054864 + 0.32444019 a_{t-1}^2+ 0.74026870 \sigma_{t-
 ## 
 ## Mean and Variance Equation:
 ##  data ~ arma(1, 0) + garch(1, 1)
-## &lt;environment: 0x000000000b897250&gt;
+## &lt;environment: 0x000000000b8aa668&gt;
 ##  [data = diffr]
 ## 
 ## Conditional Distribution:
@@ -213,7 +216,7 @@ a_t=\varepsilon_t \sqrt{0.00054864 + 0.32444019 a_{t-1}^2+ 0.74026870 \sigma_{t-
 ##  630.9    normalized:  1.19 
 ## 
 ## Description:
-##  Wed Oct 08 00:00:44 2014 by user: wufuh_000 
+##  Sat Oct 11 00:48:12 2014 by user: wufuh_000 
 ## 
 ## 
 ## Standardised Residuals Tests:
