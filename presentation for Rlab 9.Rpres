@@ -18,46 +18,61 @@ css: rlab9.css
 
 <img src="http://www.rmi.nus.edu.sg/_images/rmilogo_27June2013.jpg" class="imgCenter" border=0/>
 
-Code for Question 1
+Problem Set 1
+========================================================
+css: file://C:/_gdrive/NUS/FE5209-financial ecometrics/_src/rlab9.css
+
+> The data set midcapD.ts in the fEcofin package has daily returns on 20 midcap stocks in columns 2-21. Columns 1 and 22 contain the date and market returns, respectively. In this section, we will use returns on the first 10 stocks. To find the stock prices from the returns, we use the relationship $P_t = P_0 * exp(r_1 + ...+ r_t)$ where $P_t$ and $r_t$ are the price and log return at time t. The returns will be used as approximations to the log returns. The prices at time 0 are unknown, so we will use P_0 = 1 for each stock. This means that the price series we use will be off by multiplicative factors. This does not affect the number of cointegration vectors. If we find that there are cointegration relationships, then it would be necessary to get the price data to investigate trading strategies. Johansen's cointegration analysis will be applied to the prices with the ca.jo function in the urca package.
+
+<img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/375px-Simpsons_FamilyPicture.png" class="imgRight" border=0 width=20%/>
+
+Question 1
 ========================================================
 css: rlab9.css
 
-```{r , eval=FALSE}
-if (!"fEcofin" %in% rownames(installed.packages())){
-  install.packages("fEcofin", repos="http://R-Forge.R-project.org")
-}
-if (!"urca" %in% rownames(installed.packages())){
-  install.packages("urca", repos="http://R-Forge.R-project.org")
-}
+> Q1: How many cointegration vectors were found?
+
+```{r , eval=FALSE, results='hide', echo=TRUE}
+rm(list=ls())
 library(fEcofin)
 library(urca)
-midcapD.ts=read.csv("8_midcapD.ts.csv",
-                    header=T,sep=";")
+midcapD.ts=read.csv("8_midcapD.ts.csv",header=T,sep=";")
+x = midcapD.ts[,2:11]
+prices= exp(apply(x,2,cumsum))
+options(digits=3)
+```
+
+Question 1
+========================================================
+css: rlab9.css
+```{r , eval=TRUE, results='hide', echo=FALSE}
+library(fEcofin)
+library(urca)
+midcapD.ts=read.csv("8_midcapD.ts.csv",header=T,sep=";")
 x = midcapD.ts[,2:11]
 prices= exp(apply(x,2,cumsum))
 options(digits=3)
 summary(ca.jo(prices))
 ```
 
-<img src="http://tstotopix.files.wordpress.com/2014/01/tapped_out_question_mark.png?w=96&h=94" class="imgRight" border=0/>
+> A1: In this case, regardless of whether one uses a 1%, 5%, or 10% level test, one suggest that no cointegration vector should exist.
 
-Question 1
-========================================================
-```
-In this case, regardless of whether one uses a 1%, 5%, or 10% level test, one suggest that no cointegration vector should exist.
+```{r , eval=TRUE}
+summary(ca.jo(prices))
 ```
 
-<img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/375px-Simpsons_FamilyPicture.png" class="imgLeft" border=0/>
 
-Code for Question 2-4
+Problem Setup for Question 2-4
 ========================================================
+
+> This example is similar to Example 15.3 but uses different yield data. The data are in the mk.zero2 data set in the fEcofin package. There are 55 maturities and they are in the vector mk.maturity . We will use only the first 10 yields. Run
 
 ```{r message=FALSE, warning=FALSE, results='hide'}
 library(fEcofin)
 library(urca)
-mk.maturity=read.csv("8_mk.maturity.csv",header=T)
-mk.maturity[2:11,]
-mk.zero2=read.csv("8_mk.zero2.csv",header=T,sep=";")
+#mk.maturity=read.csv("8_mk.maturity.csv",header=T)
+mk.maturity[2:11,] # maturity
+#mk.zero2=read.csv("8_mk.zero2.csv",header=T,sep=";")#yield
 res = ca.jo(mk.zero2[,2:11])
 summary(res)
 #plotres(res)
@@ -66,18 +81,32 @@ summary(res)
 Question 2
 ========================================================
 
-- **We choose maturities from mk.maturity(from row 2 to row 11), and they are 0.083, 0.167, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833.**
+> Q2: What maturities are being used? Are they short-, medium-, or longterm, or a mixture of short- and long-term maturities?
 
-- **They are short-term maturities.**
+```{r message=FALSE, warning=FALSE}
+ma=mk.maturity[2:11,] # maturity
+sort(ma) # sort it
+```
+
+> A2: We choose maturities from mk.maturity(from row 2 to row 11), and they are 0.083, 0.167, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833. They are **short-term** maturities.
 
 Question 3
 ========================================================
 
-From the summary, one accepts that r is less than or equal to 4 but rejects that r is less than or equal to 3, so one concludes that r = 4. And 4 cointegration vectors were found using 1% level test.
+> - Q3: How many cointegration vectors were found? Use 1% level tests. 
+> - A3: According to Johansen test, if the test statistic is greater than the critial value, we can reject the NULL hypothesis. So from the result below, we can rejects that r is equal to 0, less than or equal to 1, 2 and 3 but cannot reject r<=4, so we conclude that r = 4. In other words, 4 cointegration vectors were found using 1% level test.
 
-Problem 4 - Which trading strategy do you recommend?
+```{r message=FALSE, warning=FALSE}
+zos=mk.zero2[,2:11]
+res = ca.jo(zos)
+summary(res)
+#plotres(res)
+```
+
+Question 4
 ========================================================
-Pairs Trading
+> - Q4: Which trading strategy do you recommend?
+> - A4: Pairs Trading
 
 
 

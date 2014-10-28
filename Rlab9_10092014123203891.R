@@ -2,6 +2,9 @@
 
 #library(urca)
 #setwd("c:/Ying/teaching/MFE Econometrics/AY201415-SEM1/code/")
+#if (!"fEcofin" %in% rownames(installed.packages())){
+#  install.packages("fEcofin", repos="http://R-Forge.R-project.org")
+#}
 
 library(urca)
 library(fEcofin)
