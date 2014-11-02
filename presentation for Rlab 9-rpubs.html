@@ -803,46 +803,53 @@ hljs.initHighlightingOnLoad();
 
 </section>
 <section data-transition="default" data-transition-speed="default">
-<h3>Problem Set Up</h3>
+<h3>Problem Set 1 - Cointegration Analysis of Midcap Prices</h3>
 <div class="slideContent" >
 <blockquote>
-<p>The data set midcapD.ts in the fEcofin package has daily returns on 20 midcap stocks in columns 2-21. Columns 1 and 22 contain the date and market returns, respectively. In this section, we will use returns on the first 10 stocks. To find the stock prices from the returns, we use the relationship</p>
+<p>The data set midcapD.ts in the fEcofin package has daily returns on 20 midcap stocks in columns 2-21. Columns 1 and 22 contain the date and market returns, respectively. In this section, we will use returns on the first 10 stocks. To find the stock prices from the returns, we use the relationship \( P_t = P_0 * exp(r_1 + ...+ r_t) \) where \( P_t \) and \( r_t \) are the price and log return at time t. The returns will be used as approximations to the log returns. The prices at time 0 are unknown, so we will use \( P_0 = 1 \) for each stock. This means that the price series we use will be off by multiplicative factors. This does not affect the number of cointegration vectors. If we find that there are cointegration relationships, then it would be necessary to get the price data to investigate trading strategies. Johansen&#39;s cointegration analysis will be applied to the prices with the ca.jo function in the urca package.</p>
 </blockquote>
 
-<p>\[ P_t = P_0 * exp(r_1 + ...+ r_t) \]</p>
-
-<blockquote>
-<p>where \( P_t \) and \( r_t \) are the price and log return at time t. The returns will be used as approximations to the log returns. The prices at time 0 are unknown, so we will use P_0 = 1 for each stock. This means that the price series we use will be off by multiplicative factors. This does not affect the number of cointegration vectors. If we find that there are cointegration relationships, then it would be necessary to get the price data to investigate trading strategies. Johansen&#39;s cointegration analysis will be applied to the prices with the ca.jo function in the urca package.</p>
-</blockquote>
-
-<p><img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/375px-Simpsons_FamilyPicture.png" class="imgLeft" border=0/></p>
+<p><img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/375px-Simpsons_FamilyPicture.png" class="imgRight" border=0 width=20%/></p>
 
 </div>
 
 </section>
 <section data-transition="default" data-transition-speed="default">
-<h3>Problem 1 - How many cointegration vectors were found?</h3>
+<h3>Question 1</h3>
 <div class="slideContent" >
-<pre><code class="r">#if (!&quot;fEcofin&quot; %in% rownames(installed.packages())){
-#  install.packages(&quot;fEcofin&quot;, repos=&quot;http://R-Forge.R-project.org&quot;)
-#}
+<blockquote>
+<p>Q1: How many cointegration vectors were found in prices?</p>
+</blockquote>
+
+<pre><code class="r">rm(list=ls())
 library(fEcofin)
 library(urca)
-midcapD.ts=read.csv(&quot;8_midcapD.ts.csv&quot;,header=T,sep=&quot;;&quot;)
-x = midcapD.ts[,2:11]
-prices= exp(apply(x,2,cumsum))
+# import time series data
+if (!exists(&quot;midcapD.ts&quot;)){
+  midcapD.ts=read.csv(&quot;8_midcapD.ts.csv&quot;,header=T,sep=&quot;;&quot;)
+}
+# Columns 1 and 22 contain the date and market returns, respectively.
+#head(midcapD.ts)
+# the data we are using
+data = midcapD.ts[,2:11]
+# P_t = P_0 * exp(r_1 + ...+ r_t)
+prices= exp(apply(data,2,cumsum))
+#controls the number of digits to print when printing numeric values
 options(digits=3)
+#Conducts the Johansen procedure on prices
 summary(ca.jo(prices))
 </code></pre>
 
-<p><img src="http://tstotopix.files.wordpress.com/2014/01/tapped_out_question_mark.png?w=96&h=94" class="imgRight" border=0/></p>
-
 </div>
 
 </section>
 <section data-transition="default" data-transition-speed="default">
-<h3>Problem 1</h3>
+<h3>Question 1</h3>
 <div class="slideContent" >
+<blockquote>
+<p>A1: According to Johansen test, if the test statistic is greater than the critial value, we can reject the NULL hypothesis. In this case, regardless of whether we use a 1%, 5%, or 10% level test, we suggest that no cointegration vector should exist.</p>
+</blockquote>
+
 <pre><code class="r">summary(ca.jo(prices))
 </code></pre>
 
@@ -923,22 +930,26 @@ SBUX.d -0.00164 -0.001303 6.84e-04
 AYE.d  -0.00107 -0.002573 3.51e-04
 </code></pre>
 
-<pre><code>In this case, regardless of whether one uses a 1%, 5%, or 10% level test, one suggest that no cointegration vector should exist.
-</code></pre>
-
 </div>
 
 </section>
 <section data-transition="default" data-transition-speed="default">
-<h3>Code for Question 2-4</h3>
+<h3>Problem Set 2 - Cointegration Analysis of Yields</h3>
 <div class="slideContent" >
-<pre><code class="r">library(fEcofin)
+<blockquote>
+<p>This example is similar to Example 15.3(<em>SDAFE</em>) but uses different yield data. The data are in the mk.zero2 data set in the fEcofin package. There are 55 maturities and they are in the vector mk.maturity . We will use only the first 10 yields. Run</p>
+</blockquote>
+
+<pre><code class="r">library(MTS)
+library(fUnitRoots)
+library(fEcofin)
 library(urca)
-mk.maturity=read.csv(&quot;8_mk.maturity.csv&quot;,header=T)
-mk.maturity[2:11,]
-mk.zero2=read.csv(&quot;8_mk.zero2.csv&quot;,header=T,sep=&quot;;&quot;)
-res = ca.jo(mk.zero2[,2:11])
-summary(res)
+#mk.maturity=read.csv(&quot;8_mk.maturity.csv&quot;,header=T)
+mk.maturity[2:11,] # maturity
+#mk.zero2=read.csv(&quot;8_mk.zero2.csv&quot;,header=T,sep=&quot;;&quot;)#yield
+zos = mk.zero2[,2:11]
+zos.vecm = ca.jo(zos)
+summary(zos.vecm)
 #plotres(res)
 </code></pre>
 
@@ -948,10 +959,20 @@ summary(res)
 <section data-transition="default" data-transition-speed="default">
 <h3>Question 2</h3>
 <div class="slideContent" >
-<ul>
-<li><p><strong>We choose maturities from mk.maturity(from row 2 to row 11), and they are 0.083, 0.167, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833.</strong></p></li>
-<li><p><strong>They are short-term maturities.</strong></p></li>
-</ul>
+<blockquote>
+<p>Q2: What maturities are being used? Are they short-, medium-, or longterm, or a mixture of short- and long-term maturities?</p>
+</blockquote>
+
+<pre><code class="r">ma=mk.maturity[2:11,] # maturity
+sort(ma) # sort it
+</code></pre>
+
+<pre><code> [1] 0.167 0.250 0.333 0.417 0.500 0.583 0.667 0.750 0.833 0.917
+</code></pre>
+
+<blockquote>
+<p>A2: We choose maturities from mk.maturity(from row 2 to row 11), and they are 0.083, 0.167, 0.25, 0.333, 0.417, 0.5, 0.583, 0.667, 0.75, 0.833. They are <strong>short-term</strong> maturities.</p>
+</blockquote>
 
 </div>
 
@@ -959,152 +980,16 @@ summary(res)
 <section data-transition="default" data-transition-speed="default">
 <h3>Question 3</h3>
 <div class="slideContent" >
-<p>From the summary, one accepts that r is less than or equal to 4 but rejects that r is less than or equal to 3, so one concludes that r = 4. And 4 cointegration vectors were found using 1% level test.</p>
-
-</div>
-
-</section>
-<section data-transition="default" data-transition-speed="default">
-<h3>Problem 4 - Which trading strategy do you recommend?</h3>
-<div class="slideContent" >
-<p>Pairs Trading</p>
-
-</div>
-
-</section>
-<section data-transition="default" data-transition-speed="default">
-<h3>Problem Set 2</h3>
-<div class="slideContent" >
-<p>Consider the monthly yields of Moody&#39;s seasoned corporate Aaa and Baa bonds from July 1954 to February 2005 for 609 observations. The data m-bnd.txt were obtained from Federal Reserve Bank of St. Louis.</p>
-
-<pre><code class="r">library(&quot;fUnitRoots&quot;)
-library(&quot;urca&quot;)
-library(&quot;MTS&quot;)
-
-da=read.table(&quot;m-bnd.txt&quot;)
-bnd=da[,4:5]
-colnames(bnd) &lt;- c(&quot;Aaa&quot;,&quot;Baa&quot;)
-adfTest(bnd[,1],lags=3,type=&quot;c&quot;) #Augmented Dickey-Fuller Test
-adfTest(bnd[,2],lags=2,type=&quot;c&quot;)
-m1=VARorder(bnd)
-m2=ca.jo(bnd,K=2,ecdet=c(&quot;none&quot;))
-summary(m2)
-</code></pre>
-
-</div>
-
-</section>
-<section data-transition="default" data-transition-speed="default">
-<h3>Problem 5 - Are the bond yields stationary? Justify using the augmented DickyFuller unit root test.</h3>
-<div class="slideContent" >
-<hr size=1>
-
+<blockquote>
 <ul>
-<li>1. MTSplot to observe any cointegration pattern</li>
+<li>Q3: How many cointegration vectors were found? Use 1% level tests. </li>
+<li>A3: According to Johansen test, if the test statistic is greater than the critial value, we can reject the NULL hypothesis. So from the result below, we can rejects that r is equal to 0, less than or equal to 1, 2 and 3 but cannot reject r&lt;=4, so we conclude that r = 4. In other words, 4 cointegration vectors were found using 1% level test.</li>
 </ul>
-
-<pre><code class="r">da=read.table(&quot;m-bnd.txt&quot;)
-bnd=da[,4:5]
-#Figure shows the time plots of the bond yields. As expected, the two series move in a parallel manner.
-MTSplot(bnd)
-</code></pre>
-
-<p><img src="data:image/png;base64,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" title="plot of chunk quickPlot" alt="plot of chunk quickPlot" style="display: block; margin: auto;" /></p>
-
-<ul>
-<li>2. Augmented Dickey-Fuller Test with \( H_0 \): \( \beta = 0 \) -&gt; Unit Root Non Stationary</li>
-</ul>
-
-<pre><code class="r">#The augmented Dickey-Fuller unit-root test confirms that the two bond yields are unit-root nonstationary.
-colnames(bnd) &lt;- c(&quot;Aaa&quot;,&quot;Baa&quot;)
-adfTest(bnd[,1],lags=3,type=&quot;c&quot;)
-</code></pre>
-
-<pre><code>
-Title:
- Augmented Dickey-Fuller Test
-
-Test Results:
-  PARAMETER:
-    Lag Order: 3
-  STATISTIC:
-    Dickey-Fuller: -1.7007
-  P VALUE:
-    0.425 
-
-Description:
- Tue Oct 28 06:35:16 2014 by user: wufuh_000
-</code></pre>
-
-<pre><code class="r">adfTest(bnd[,2],lags=2,type=&quot;c&quot;)
-</code></pre>
-
-<pre><code>
-Title:
- Augmented Dickey-Fuller Test
-
-Test Results:
-  PARAMETER:
-    Lag Order: 2
-  STATISTIC:
-    Dickey-Fuller: -1.6221
-  P VALUE:
-    0.4544 
-
-Description:
- Tue Oct 28 06:35:16 2014 by user: wufuh_000
-</code></pre>
-
-</div>
-
-</section>
-<section data-transition="default" data-transition-speed="default">
-<h3>Problem 6</h3>
-<div class="slideContent" >
-<blockquote>
-<p>Q: Choose an VAR model to fit the data. Specify the order using the information criteria.</p>
 </blockquote>
 
-<pre><code class="r">m1=VARorder(bnd)
-</code></pre>
-
-<pre><code>selected order: aic =  11 
-selected order: bic =  3 
-selected order: hq =  3 
-Summary table:  
-       p   AIC   BIC    HQ    M(p) p-value
- [1,]  0 -0.57 -0.57 -0.57    0.00  0.0000
- [2,]  1 -7.87 -7.84 -7.86 4331.08  0.0000
- [3,]  2 -8.18 -8.13 -8.16  195.53  0.0000
- [4,]  3 -8.26 -8.17 -8.23   51.61  0.0000
- [5,]  4 -8.26 -8.14 -8.21    5.51  0.2387
- [6,]  5 -8.25 -8.10 -8.19    3.51  0.4768
- [7,]  6 -8.28 -8.10 -8.21   23.42  0.0001
- [8,]  7 -8.28 -8.08 -8.20   10.63  0.0311
- [9,]  8 -8.28 -8.05 -8.19    8.91  0.0634
-[10,]  9 -8.28 -8.02 -8.18    5.16  0.2711
-[11,] 10 -8.28 -7.99 -8.16    7.05  0.1335
-[12,] 11 -8.28 -7.97 -8.16   11.22  0.0242
-[13,] 12 -8.28 -7.93 -8.15    5.90  0.2071
-[14,] 13 -8.27 -7.89 -8.13    2.04  0.7292
-</code></pre>
-
-<blockquote>
-<p>A: The order p=3 is selected by both BIC and HQ. Therefore, we employ a VAR(3) model in the cointegration test.</p>
-</blockquote>
-
-</div>
-
-</section>
-<section data-transition="default" data-transition-speed="default">
-<h3>Problem 7</h3>
-<div class="slideContent" >
-<blockquote>
-<p>Q: Conduct cointegration test</p>
-</blockquote>
-
-<pre><code class="r">m2=ca.jo(bnd,K=2,ecdet=c(&quot;none&quot;))
-summary(m2)
+<pre><code class="r">zos=mk.zero2[,2:11]
+zos.vecm = ca.jo(zos)
+summary(zos.vecm)
 </code></pre>
 
 <pre><code>
@@ -1115,40 +1000,182 @@ summary(m2)
 Test type: maximal eigenvalue statistic (lambda max) , with linear trend 
 
 Eigenvalues (lambda):
-[1] 0.05477 0.00467
+ [1] 0.7518 0.6630 0.5981 0.5498 0.4675 0.4263 0.3486 0.2474 0.1162 0.0218
 
 Values of teststatistic and critical values of test:
 
           test 10pct  5pct 1pct
-r &lt;= 1 |  2.84   6.5  8.18 11.6
-r = 0  | 34.19  12.9 14.90 19.2
+r &lt;= 9 |  1.43   6.5  8.18 11.6
+r &lt;= 8 |  8.03  12.9 14.90 19.2
+r &lt;= 7 | 18.48  18.9 21.07 25.8
+r &lt;= 6 | 27.87  24.8 27.14 32.1
+r &lt;= 5 | 36.12  30.8 33.32 38.8
+r &lt;= 4 | 40.96  36.2 39.43 44.6
+r &lt;= 3 | 51.87  42.1 44.91 51.3
+r &lt;= 2 | 59.25  48.4 51.07 57.1
+r &lt;= 1 | 70.71  54.0 57.00 63.4
+r = 0  | 90.57  59.0 62.42 68.6
 
 Eigenvectors, normalised to first column:
 (These are the cointegration relations)
 
-       Aaa.l2 Baa.l2
-Aaa.l2  1.000   1.00
-Baa.l2 -0.886  -2.72
+          M.1.l2   M.2.l2  M.3.l2  M.4.l2 M.5.l2    M.6.l2   M.7.l2 M.8.l2
+M.1.l2    1.0000   1.0000   1.000   1.000    1.0    1.0000   1.0000   1.00
+M.2.l2   -4.7344   0.0688  -5.226  -2.685   -1.1   -3.7018  -0.0754  -2.81
+M.3.l2   10.4480 -16.1326  14.436  -1.216  -14.9    4.7046 -16.5754  -2.03
+M.4.l2  -11.4070  55.1551 -27.040  11.825   59.1   -2.0077  36.8685  17.14
+M.5.l2    0.0861 -95.6143  37.192 -14.876  -92.7   22.2520 -19.4532 -22.91
+M.6.l2   16.0781  92.4013 -38.015  -1.399   18.5  -93.9857 -14.0171   2.50
+M.7.l2  -18.4791 -46.0499  23.988  15.680  130.5  156.3148   8.9956   8.83
+M.8.l2    6.4942  11.3213  -4.385  -0.994 -160.4 -122.2777  13.2719  20.93
+M.9.l2    1.9199  -3.1913  -2.660 -14.820   70.3   37.7554 -12.1269 -39.08
+M.10.l2  -1.4045   1.0592   0.708   7.487  -10.2   -0.0391   2.0773  16.42
+        M.9.l2 M.10.l2
+M.1.l2     1.0   1.000
+M.2.l2   -13.8  -0.215
+M.3.l2    72.0 -16.884
+M.4.l2   -99.1  39.882
+M.5.l2   -29.7 -20.449
+M.6.l2    46.0 -32.564
+M.7.l2   254.0  42.682
+M.8.l2  -427.4  -1.593
+M.9.l2   258.6 -23.037
+M.10.l2  -61.9  11.081
 
 Weights W:
 (This is the loading matrix)
 
-       Aaa.l2  Baa.l2
-Aaa.d -0.0470 0.00248
-Baa.d  0.0405 0.00214
+       M.1.l2 M.2.l2 M.3.l2 M.4.l2  M.5.l2 M.6.l2 M.7.l2 M.8.l2    M.9.l2
+M.1.d   11.41 0.0231   2.93 -6.142  1.1392 -2.056 -1.108 -0.196 -0.069935
+M.2.d    6.09 0.3243   4.68 -1.920  0.3127 -1.732 -1.555 -0.718  0.000369
+M.3.d    3.61 0.6442   5.03 -0.994  0.0122 -1.526 -1.644 -0.819  0.039527
+M.4.d    3.51 0.9286   4.65 -1.621 -0.0172 -1.325 -1.482 -0.707  0.057404
+M.5.d    4.02 1.0595   4.08 -2.191 -0.0374 -1.143 -1.286 -0.586  0.067680
+M.6.d    4.49 0.9969   3.57 -2.271 -0.1221 -0.997 -1.151 -0.517  0.077499
+M.7.d    4.85 0.8585   3.15 -2.108 -0.2187 -0.913 -1.060 -0.466  0.087693
+M.8.d    5.01 0.7304   2.90 -1.942 -0.2757 -0.890 -0.978 -0.416  0.097029
+M.9.d    4.97 0.6658   2.85 -1.912 -0.2788 -0.935 -0.883 -0.363  0.104393
+M.10.d   4.85 0.6689   2.89 -2.035 -0.2280 -1.015 -0.765 -0.335  0.109826
+       M.10.l2
+M.1.d    0.104
+M.2.d    0.152
+M.3.d    0.168
+M.4.d    0.170
+M.5.d    0.178
+M.6.d    0.190
+M.7.d    0.202
+M.8.d    0.212
+M.9.d    0.217
+M.10.d   0.218
 </code></pre>
 
+<pre><code class="r">#plotres(res)
+</code></pre>
+
+</div>
+
+</section>
+<section data-transition="default" data-transition-speed="default">
+<h3>Question 4</h3>
+<div class="slideContent" >
 <blockquote>
-<p>A: Compared with critical values, we rejectr=0, but cannot rejectr=1. Therefore, the \( \Pi \) matrix of ECM is of rank 1 and there is a cointegrating vector.</p>
+<ul>
+<li>Q4: Which trading strategy do you recommend?</li>
+<li>A4: Pairs/Basket Trading.</li>
+</ul>
+
+<p>The VECM model for the VAR(1) process is:
+\[ \Delta Y_t = \alpha \beta^{T} Y_{t-1} + \varepsilon  \]
+We know all the time series components in our data \( Y_t \) is I(1), i.e. \( Y_t \) is I(1). Therefore, \( \Delta Y_t \) is I(0). The right hand side \( \alpha \beta^{T} Y_{t-1} \) should also be I(0). \( \alpha \) is just a loading matrix specifying the speed of mean reversion, so it follows \( \beta^{T} Y_{t-1} \) is also I(0), i.e. \( \beta^{T} Y_{t}=I(0) \).</p>
+
+<p>In our case, we call \( \beta^{T} Y_{t} \) <strong>compounded yield</strong> as it is constructed from different yields. So we can build a strategy to trade the <strong>compounded yield</strong> according to the error correction model.</p>
 </blockquote>
 
 </div>
 
 </section>
 <section data-transition="default" data-transition-speed="default">
-<h3>Problem 8 -  Propose a trading strategy</h3>
+<h3>Question 4 (continued 1)</h3>
 <div class="slideContent" >
-<p>Pairs Trading</p>
+<blockquote>
+<p>Strategy Implementation</p>
+
+<ul>
+<li>1. Create a portfolio using the cointegration vector as portfolio weights. This portfolio can use any IR products such as bond, swap, futures.(<a href="http://www.cmegroup.com/trading/interest-rates/">CMEGroup IR products</a>)</li>
+<li>2. Select a range variable as a signal indicator, say one standard deviation. We allow the compounded yield fluctuate inside the range around it moving average. When the compounded yield is outside the range, a BUY/SELL signal is triggered.</li>
+</ul>
+</blockquote>
+
+</div>
+
+</section>
+<section data-transition="default" data-transition-speed="default">
+<h3>Question 4 (continued 2)</h3>
+<div class="slideContent" >
+<p>Get compounded yield \( cyield = \beta Y_t \) and test stationarity</p>
+
+<pre><code class="r">beta=zos.vecm@V # Beta after normalization
+mbeta=beta[,1:4] # 10x4# meaningful cointegration vector
+cyield=as.matrix(zos) %*% mbeta # (AB)&#39; = (B&#39;*A&#39;) - cyield should be a stationary time series according to VECM
+# stationarity check with Augumented Dickey-Fuller test
+adfTest(cyield[,1])@test$p.value
+</code></pre>
+
+<pre><code>
+0.01 
+</code></pre>
+
+<pre><code class="r">adfTest(cyield[,2])@test$p.value
+</code></pre>
+
+<pre><code>
+0.01 
+</code></pre>
+
+<pre><code class="r">adfTest(cyield[,3])@test$p.value
+</code></pre>
+
+<pre><code>
+0.0368 
+</code></pre>
+
+<pre><code class="r">adfTest(cyield[,4])@test$p.value
+</code></pre>
+
+<pre><code>
+0.01 
+</code></pre>
+
+</div>
+
+</section>
+<section data-transition="default" data-transition-speed="default">
+<h3>Question 4 (continued 3)</h3>
+<div class="slideContent" >
+<pre><code class="r"># draw cyield and range lines
+plot(cyield[,1],type=&quot;o&quot;,col=&#39;black&#39;,ylim=c(-0.005,0.005))
+lines(cyield[,2],type=&quot;o&quot;,col=&#39;red&#39;,ylim=c(-0.005,0.005))
+lines(cyield[,3],type=&quot;o&quot;,col=&#39;green&#39;,ylim=c(-0.005,0.005))
+lines(cyield[,4],type=&quot;l&quot;,col=&#39;blue&#39;,ylim=c(-0.005,0.005))
+abline(h = c(-0.0005,0.0005, -0.001,0.001, -0.002,0.002)) # range lines
+</code></pre>
+
+<p><img src="data:image/png;base64,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" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" /></p>
+
+</div>
+
+</section>
+<section data-transition="default" data-transition-speed="default">
+<h3>Question 4 (continued 4)</h3>
+<div class="slideContent" >
+<blockquote>
+<p>Optimization and Basket Selection</p>
+
+<ul>
+<li><p>We already know \( \beta^{T} Y_{t}=I(0) \) and not of full rank, we can use Gaussian elimination to transform \( \beta^{T} \) to something like a triangular matrix. If there are r cointegration relationships in a n-variable system, there exists a cointegrating vector for each subset of (n-r+1) variables. In our case, use 7 yields instead of 10 to reduce trading cost.</p></li>
+<li><p>Which basket we should select depends on trading costs/fee, bid/ask spread.</p></li>
+</ul>
+</blockquote>
 
 </div>
 

@@ -1,0 +1,162 @@
+---
+title: "Financial Time Series Training Course"
+author: "中科信软特约老师: Henry Wu Fuheng (wufuheng@gmail.com)"
+date: "Friday, October 31, 2014"
+output: html_document
+---
+
+<img src="http://www.zksoft.org/img/logo.jpg" class="imgCenter" border=0/>
+
+## 第一篇 VaR与极值理论
+
+> 第1讲 VaR基本理论
+
+> 第2讲 VaR的RiskMetrics计算方法
+
+> 第3讲 VaR计量模型计算方法
+
+> 第4讲 VaR的经验分位数计算方法
+
+> 第5讲 分位数回归理论与案例
+
+分位数回归(Quantile Regression)是计量经济学的研究前沿方向之一，它利用解释变量的多个分位数（例如四分位、十分位、百分位等）来得到被解释变量的条件分布的相应的分位数方程。与传统的OLS只得到均值方程相比，它可以更详细地描述变量的统计分布。
+
+但是在实际的经济生活中，传统的线性回归模型的假设常常不被满足，例如数据出现尖峰或厚尾的分布、存在显著的异方差等情况，这时的最小二乘法估计将不再具有上述优良性且稳健性非常差。最小二乘回归假定自变量X只能影响因变量的条件分布的位置，但不能影响其分布的刻度或形状的任何其他方面。
+
+为了弥补普通最小二乘法在回归分析中的缺陷，Koenker和Bassett于1978年提出了分位数回归(Quantile Regression)的思想。它依据因变量的条件分位数对自变量X进行回归，这样得到了所有分位数下的回归模型。因此分位数回归相比普通最小二乘回归只能描述自变量X对于因变量y局部变化的影响而言，更能精确地描述自变量X对于因变量y的变化范围以及条件分布形状的影响。*分位数回归能够捕捉分布的尾部特征*，当自变量对不同部分的因变量的分布产生不同的影响时．例如出现左偏或右偏的情况时。它能更加全面的刻画分布的特征，从而得到全面的分析，而且其分位数回归系数估计比OLS回归系数估计更稳健。
+
+分位数回归采用加权残差绝对值之和的方法估计参数 ,其优点体现在以下几方面:
+- 它对模型中的随机扰动项不需做任何分布的假定 ,这样整个回归模型就具有很强的稳健性
+- 分位数回归本身没有使用一个连接函数来描述因变量的均值和方差的相互关系，因此分位数回归有着比较好的弹性性质
+- 分位数回归由于是对所有分位数进行回归，因此对于数据中出现的异常点具有耐抗性
+- 不同于普通的最小二乘回归，分位数回归对于因变量具有单调变换性
+- 分位数回归估计出来的参数具有在大样本理论下的渐进优良性
+
+```{r, eval=FALSE, results='hide', echo=TRUE}
+library(quantreg)
+library(AER)
+
+data(CPS1988)
+
+cps_f = log(wage) ~ experience + I(experience^2) + education
+#use rq to regress, by default use 0.5 persentile
+cps_lad = rq(cps_f, data = CPS1988)
+summary(cps_lad)
+#regress with multiple percentiles
+cps_rqbig= rq(cps_f, tau = seq(0.05, 0.95, by = 0.05), data = CPS1988)
+cps_rqbigs = summary(cps_rqbig)
+#draw graphs
+plot(cps_rqbigs)
+```
+
+由下图可见高工资人群的常数项非常高，而工作经验在低工资人群中边际效应较大，而在高工资人群中较小，教育的边际效应在大部分人群中基本一致。
+
+> 第6讲 基于分位数回归的VaR计算
+
+> 第7讲 极值理论原理
+
+> 第8讲 极值理论估计方法
+
+> 第9讲 基于传统极值理论的VaR计算
+
+> 第10讲 基于传统极值理论的VaR讨论
+
+> 第11讲 基于传统极值理论的Return Level计算
+
+> 第12讲 POT极值理论原理
+
+> 第13讲 POT极值理论参数估计
+
+> 第14讲 基于POT极值理论的VaR计算
+
+
+
+## 第二篇 多元协整(Multicointegration)及向量误差修正模型(VECM)
+
+> 第1讲 伪回归概念及其后果
+
+> 第2讲 协整理论与应用
+
+- 2.1  协整与共同趋势
+
+- 2.2  协整系统模拟
+
+> 第3讲 误差修正模型
+
+> 第4讲 基于残差的协整检验
+
+> 第5讲 基于stock&Waston法的协整向量与ECM估计
+
+> 第6讲 协整VAR相关理论
+
+> 第7讲 Johansen协整检验
+
+> 第8讲 协整检验实例分析
+
+> 第9讲 协整VECM极大似然估计与应用
+
+> 第10讲 用VECM构建交易策略
+
+
+## 第三篇 自回归条件异方差模型
+
+> 第1讲 介绍ARCH & GARCH
+
+> 第2讲 估计条件均值和方差
+
+> 第3讲 随机过程ARCH(1)
+
+> 第4讲 AR(1)/ARCH(1)模型
+
+> 第5讲 ARCH(p)模型
+
+> 第6讲 $ARIMA(p_A,d,q_A)$/$GARCH(p_G,q_G)$模型
+
+ - 6.1  $ARIMA(p_A,d,q_A)$/$GARCH(p_G,q_G)$模型残差分析
+
+> 第7讲 长尾GARCH模型
+
+> 第8讲 GARCH模型和ARMA模型
+
+> 第9讲 GARCH模型实例
+
+
+## 第四篇 成分分析和因子模型
+
+> 第1讲 降维 - Curse of Dimensionality
+
+High-dimensional data can be challenging to analyze. They are difficult to visualize, need extensive computer resources, and often require special statistical methodology. 
+
+Q: For multivariate time series, we can use VAR to model and forecast. Assuming we are using the simplest VAR(1) model, how many variables we need to calculate?
+
+A: 10 + 10 * 10 + 10 = 120
+
+Fortunately, in __many__ practical applications, high-dimensional data have most of their variation in a lower-dimensional space that can be found using dimension reduction techniques. There are many methods designed for dimension reduction, and in this chapter we will study two closely related techniques, *factor analysis* and *principal components analysis*, often called PCA.
+
+__PCA__ finds structure in the covariance or correlation matrix and uses this structure to locate low-dimensional subspaces containing most of the variation in the data.
+
+__Factor analysis__ explains returns with a smaller number of fundamental variables called _factors_ or _risk factors_. Factor analysis models can be classified by __the types of variables__ used as factors, macroeconomic or fundamental, and by __the estimation technique__, time series regression, cross-sectional regression, or statistical factor analysis.
+
+
+> 第2讲 主元分析PCA
+
+> 第3讲 Factor Models
+
+> 第4讲 Fitting Factor Models by Time Series Regression
+
+ - 4.1 Fama and French Three Factor Model
+ 
+ - 4.2 Estimating Expectations and Covariances of Asset Returns
+
+> 第5讲 Cross-Sectional Factor Models
+
+> 第6讲 Statistical Factor Models
+
+ - 6.1 Varimax Rotation of the Factors
+
+> 第7讲 独立成分分析ICA(Independent Component Analysis)
+
+PCA是一种数据降维的方法，但是只对符合高斯分布的样本点比较有效，那么对于其他分布的样本，有没有主元分解的方法呢？
+
+> 第8讲 PCA和ICA的比较
+

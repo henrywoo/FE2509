@@ -18,11 +18,11 @@ css: rlab9.css
 
 <img src="http://www.rmi.nus.edu.sg/_images/rmilogo_27June2013.jpg" class="imgCenter" border=0/>
 
-Problem Set 1
+Problem Set 1 - Cointegration Analysis of Midcap Prices
 ========================================================
-css: file://C:/_gdrive/NUS/FE5209-financial ecometrics/_src/rlab9.css
+source: presentation1.R
 
-> The data set midcapD.ts in the fEcofin package has daily returns on 20 midcap stocks in columns 2-21. Columns 1 and 22 contain the date and market returns, respectively. In this section, we will use returns on the first 10 stocks. To find the stock prices from the returns, we use the relationship $P_t = P_0 * exp(r_1 + ...+ r_t)$ where $P_t$ and $r_t$ are the price and log return at time t. The returns will be used as approximations to the log returns. The prices at time 0 are unknown, so we will use P_0 = 1 for each stock. This means that the price series we use will be off by multiplicative factors. This does not affect the number of cointegration vectors. If we find that there are cointegration relationships, then it would be necessary to get the price data to investigate trading strategies. Johansen's cointegration analysis will be applied to the prices with the ca.jo function in the urca package.
+> The data set midcapD.ts in the fEcofin package has daily returns on 20 midcap stocks in columns 2-21. Columns 1 and 22 contain the date and market returns, respectively. In this section, we will use returns on the first 10 stocks. To find the stock prices from the returns, we use the relationship $P_t = P_0 * exp(r_1 + ...+ r_t)$ where $P_t$ and $r_t$ are the price and log return at time t. The returns will be used as approximations to the log returns. The prices at time 0 are unknown, so we will use $P_0 = 1$ for each stock. This means that the price series we use will be off by multiplicative factors. This does not affect the number of cointegration vectors. If we find that there are cointegration relationships, then it would be necessary to get the price data to investigate trading strategies. Johansen's cointegration analysis will be applied to the prices with the ca.jo function in the urca package.
 
 <img src="http://upload.wikimedia.org/wikipedia/en/thumb/0/0d/Simpsons_FamilyPicture.png/375px-Simpsons_FamilyPicture.png" class="imgRight" border=0 width=20%/>
 
@@ -30,17 +30,27 @@ Question 1
 ========================================================
 css: rlab9.css
 
-> Q1: How many cointegration vectors were found?
+> Q1: How many cointegration vectors were found in prices?
 
 
 ```r
 rm(list=ls())
 library(fEcofin)
 library(urca)
-midcapD.ts=read.csv("8_midcapD.ts.csv",header=T,sep=";")
-x = midcapD.ts[,2:11]
-prices= exp(apply(x,2,cumsum))
+# import time series data
+if (!exists("midcapD.ts")){
+  midcapD.ts=read.csv("8_midcapD.ts.csv",header=T,sep=";")
+}
+# Columns 1 and 22 contain the date and market returns, respectively.
+#head(midcapD.ts)
+# the data we are using
+data = midcapD.ts[,2:11]
+# P_t = P_0 * exp(r_1 + ...+ r_t)
+prices= exp(apply(data,2,cumsum))
+#controls the number of digits to print when printing numeric values
 options(digits=3)
+#Conducts the Johansen procedure on prices
+summary(ca.jo(prices))
 ```
 
 Question 1
@@ -48,7 +58,8 @@ Question 1
 css: rlab9.css
 
 
-> A1: In this case, regardless of whether one uses a 1%, 5%, or 10% level test, one suggest that no cointegration vector should exist.
+
+> A1: According to Johansen test, if the test statistic is greater than the critial value, we can reject the NULL hypothesis. In this case, regardless of whether we use a 1%, 5%, or 10% level test, we suggest that no cointegration vector should exist.
 
 
 ```r
@@ -134,26 +145,29 @@ AYE.d  -0.00107 -0.002573 3.51e-04
 ```
 
 
-Problem Setup for Question 2-4
+Problem Set 2 - Cointegration Analysis of Yields
 ========================================================
-
-> This example is similar to Example 15.3 but uses different yield data. The data are in the mk.zero2 data set in the fEcofin package. There are 55 maturities and they are in the vector mk.maturity . We will use only the first 10 yields. Run
+source:presentation2.R
+> This example is similar to Example 15.3(*SDAFE*) but uses different yield data. The data are in the mk.zero2 data set in the fEcofin package. There are 55 maturities and they are in the vector mk.maturity . We will use only the first 10 yields. Run
 
 
 ```r
+library(MTS)
+library(fUnitRoots)
 library(fEcofin)
 library(urca)
 #mk.maturity=read.csv("8_mk.maturity.csv",header=T)
 mk.maturity[2:11,] # maturity
 #mk.zero2=read.csv("8_mk.zero2.csv",header=T,sep=";")#yield
-res = ca.jo(mk.zero2[,2:11])
-summary(res)
+zos = mk.zero2[,2:11]
+zos.vecm = ca.jo(zos)
+summary(zos.vecm)
 #plotres(res)
 ```
 
 Question 2
 ========================================================
-
+source:presentation2.R
 > Q2: What maturities are being used? Are they short-, medium-, or longterm, or a mixture of short- and long-term maturities?
 
 
@@ -170,15 +184,15 @@ sort(ma) # sort it
 
 Question 3
 ========================================================
-
+source:presentation2.R
 > - Q3: How many cointegration vectors were found? Use 1% level tests. 
 > - A3: According to Johansen test, if the test statistic is greater than the critial value, we can reject the NULL hypothesis. So from the result below, we can rejects that r is equal to 0, less than or equal to 1, 2 and 3 but cannot reject r<=4, so we conclude that r = 4. In other words, 4 cointegration vectors were found using 1% level test.
 
 
 ```r
 zos=mk.zero2[,2:11]
-res = ca.jo(zos)
-summary(res)
+zos.vecm = ca.jo(zos)
+summary(zos.vecm)
 ```
 
 ```
@@ -265,192 +279,95 @@ M.10.d   0.218
 
 Question 4
 ========================================================
+source:presentation2.R 24
 > - Q4: Which trading strategy do you recommend?
-> - A4: Pairs Trading
+> - A4: Pairs/Basket Trading.
 
+> The VECM model for the VAR(1) process is:
+> $$\Delta Y_t = \alpha \beta^{T} Y_{t-1} + \varepsilon $$
+> We know all the time series components in our data $Y_t$ is I(1), i.e. $Y_t$ is I(1). Therefore, $\Delta Y_t$ is I(0). The right hand side $\alpha \beta^{T} Y_{t-1}$ should also be I(0). $\alpha$ is just a loading matrix specifying the speed of mean reversion, so it follows $\beta^{T} Y_{t-1}$ is also I(0), i.e. $\beta^{T} Y_{t}=I(0)$.
 
+> In our case, we call $\beta^{T} Y_{t}$ **compounded yield** as it is constructed from different yields. So we can build a strategy to trade the **compounded yield** according to the error correction model.
 
-
-
-
-
-
-
-Problem Set 2
+Question 4 (continued 1)
 ========================================================
-css: rlab9.css
-Consider the monthly yields of Moody's seasoned corporate Aaa and Baa bonds from July 1954 to February 2005 for 609 observations. The data m-bnd.txt were obtained from Federal Reserve Bank of St. Louis.
+source:presentation2.R 24
+
+> Strategy Implementation
+> - 1. Create a portfolio using the cointegration vector as portfolio weights. This portfolio can use any IR products such as bond, swap, futures.([CMEGroup IR products](http://www.cmegroup.com/trading/interest-rates/))
+> - 2. Select a range variable as a signal indicator, say one standard deviation. We allow the compounded yield fluctuate inside the range around it moving average. When the compounded yield is outside the range, a BUY/SELL signal is triggered.
 
 
-```r
-library("fUnitRoots")
-library("urca")
-library("MTS")
-
-da=read.table("m-bnd.txt")
-bnd=da[,4:5]
-colnames(bnd) <- c("Aaa","Baa")
-adfTest(bnd[,1],lags=3,type="c") #Augmented Dickey-Fuller Test
-adfTest(bnd[,2],lags=2,type="c")
-m1=VARorder(bnd)
-m2=ca.jo(bnd,K=2,ecdet=c("none"))
-summary(m2)
-```
-
-
-Problem 5 - Are the bond yields stationary? Justify using the augmented DickyFuller unit root test.
+Question 4 (continued 2)
 ========================================================
-css: rlab9.css
+source:presentation2.R 24
 
-<hr size=1>
-
-
-
-- 1. MTSplot to observe any cointegration pattern
+Get compounded yield $cyield = \beta Y_t$ and test stationarity
 
 
 ```r
-da=read.table("m-bnd.txt")
-bnd=da[,4:5]
-#Figure shows the time plots of the bond yields. As expected, the two series move in a parallel manner.
-MTSplot(bnd)
-```
-
-<img src="presentation for Rlab 9-figure/quickPlot-1.png" title="plot of chunk quickPlot" alt="plot of chunk quickPlot" style="display: block; margin: auto;" />
-
-- 2. Augmented Dickey-Fuller Test with $H_0$: $\beta = 0$ -> Unit Root Non Stationary
-
-
-```r
-#The augmented Dickey-Fuller unit-root test confirms that the two bond yields are unit-root nonstationary.
-colnames(bnd) <- c("Aaa","Baa")
-adfTest(bnd[,1],lags=3,type="c")
+beta=zos.vecm@V # Beta after normalization
+mbeta=beta[,1:4] # 10x4# meaningful cointegration vector
+cyield=as.matrix(zos) %*% mbeta # (AB)' = (B'*A') - cyield should be a stationary time series according to VECM
+# stationarity check with Augumented Dickey-Fuller test
+adfTest(cyield[,1])@test$p.value
 ```
 
 ```
-
-Title:
- Augmented Dickey-Fuller Test
-
-Test Results:
-  PARAMETER:
-    Lag Order: 3
-  STATISTIC:
-    Dickey-Fuller: -1.7007
-  P VALUE:
-    0.425 
-
-Description:
- Tue Oct 28 08:16:30 2014 by user: wufuh_000
+     
+0.01 
 ```
 
 ```r
-adfTest(bnd[,2],lags=2,type="c")
+adfTest(cyield[,2])@test$p.value
 ```
 
 ```
+     
+0.01 
+```
 
-Title:
- Augmented Dickey-Fuller Test
+```r
+adfTest(cyield[,3])@test$p.value
+```
 
-Test Results:
-  PARAMETER:
-    Lag Order: 2
-  STATISTIC:
-    Dickey-Fuller: -1.6221
-  P VALUE:
-    0.4544 
+```
+       
+0.0368 
+```
 
-Description:
- Tue Oct 28 08:16:30 2014 by user: wufuh_000
+```r
+adfTest(cyield[,4])@test$p.value
+```
+
+```
+     
+0.01 
 ```
 
 
-Problem 6
+
+Question 4 (continued 3)
 ========================================================
-css: rlab9.css
-
-> Q: Choose an VAR model to fit the data. Specify the order using the information criteria.
-
+source:presentation2.R 24
 
 
 ```r
-m1=VARorder(bnd)
+# draw cyield and range lines
+plot(cyield[,1],type="o",col='black',ylim=c(-0.005,0.005))
+lines(cyield[,2],type="o",col='red',ylim=c(-0.005,0.005))
+lines(cyield[,3],type="o",col='green',ylim=c(-0.005,0.005))
+lines(cyield[,4],type="l",col='blue',ylim=c(-0.005,0.005))
+abline(h = c(-0.0005,0.0005, -0.001,0.001, -0.002,0.002)) # range lines
 ```
 
-```
-selected order: aic =  11 
-selected order: bic =  3 
-selected order: hq =  3 
-Summary table:  
-       p   AIC   BIC    HQ    M(p) p-value
- [1,]  0 -0.57 -0.57 -0.57    0.00  0.0000
- [2,]  1 -7.87 -7.84 -7.86 4331.08  0.0000
- [3,]  2 -8.18 -8.13 -8.16  195.53  0.0000
- [4,]  3 -8.26 -8.17 -8.23   51.61  0.0000
- [5,]  4 -8.26 -8.14 -8.21    5.51  0.2387
- [6,]  5 -8.25 -8.10 -8.19    3.51  0.4768
- [7,]  6 -8.28 -8.10 -8.21   23.42  0.0001
- [8,]  7 -8.28 -8.08 -8.20   10.63  0.0311
- [9,]  8 -8.28 -8.05 -8.19    8.91  0.0634
-[10,]  9 -8.28 -8.02 -8.18    5.16  0.2711
-[11,] 10 -8.28 -7.99 -8.16    7.05  0.1335
-[12,] 11 -8.28 -7.97 -8.16   11.22  0.0242
-[13,] 12 -8.28 -7.93 -8.15    5.90  0.2071
-[14,] 13 -8.27 -7.89 -8.13    2.04  0.7292
-```
+<img src="presentation for Rlab 9-figure/unnamed-chunk-8-1.png" title="plot of chunk unnamed-chunk-8" alt="plot of chunk unnamed-chunk-8" style="display: block; margin: auto;" />
 
-> A: The order p=3 is selected by both BIC and HQ. Therefore, we employ a VAR(3) model in the cointegration test.
-
-Problem 7
+Question 4 (continued 4)
 ========================================================
-css: rlab9.css
+source:presentation2.R 24
+> Optimization and Basket Selection
 
-> Q: Conduct cointegration test
+> - We already know $\beta^{T} Y_{t}=I(0)$ and not of full rank, we can use Gaussian elimination to transform $\beta^{T}$ to something like a triangular matrix. If there are r cointegration relationships in a n-variable system, there exists a cointegrating vector for each subset of (n-r+1) variables. In our case, use 7 yields instead of 10 to reduce trading cost.
 
-
-```r
-m2=ca.jo(bnd,K=2,ecdet=c("none"))
-summary(m2)
-```
-
-```
-
-###################### 
-# Johansen-Procedure # 
-###################### 
-
-Test type: maximal eigenvalue statistic (lambda max) , with linear trend 
-
-Eigenvalues (lambda):
-[1] 0.05477 0.00467
-
-Values of teststatistic and critical values of test:
-
-          test 10pct  5pct 1pct
-r <= 1 |  2.84   6.5  8.18 11.6
-r = 0  | 34.19  12.9 14.90 19.2
-
-Eigenvectors, normalised to first column:
-(These are the cointegration relations)
-
-       Aaa.l2 Baa.l2
-Aaa.l2  1.000   1.00
-Baa.l2 -0.886  -2.72
-
-Weights W:
-(This is the loading matrix)
-
-       Aaa.l2  Baa.l2
-Aaa.d -0.0470 0.00248
-Baa.d  0.0405 0.00214
-```
-
-> A: Compared with critical values, we rejectr=0, but cannot rejectr=1. Therefore, the $\Pi$ matrix of ECM is of rank 1 and there is a cointegrating vector.
-
-Problem 8 -  Propose a trading strategy
-========================================================
-css: rlab9.css
-
-
-Pairs Trading
+> - Which basket we should select depends on trading costs/fee, bid/ask spread.

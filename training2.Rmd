@@ -1,0 +1,115 @@
+---
+title: "Financial Time Series Training Course"
+author: "中科信软特约老师: Henry Wu (wufuheng@gmail.com)"
+date: "Friday, October 31, 2014"
+output: html_document
+---
+
+<img src="http://www.zksoft.org/img/logo.jpg" class="imgCenter" border=0/>
+
+## 第一篇 VaR与极值理论
+
+> 第1讲 VaR基本理论
+
+> 第2讲 VaR的RiskMetrics计算方法
+
+> 第3讲 VaR计量模型计算方法
+
+> 第4讲 VaR的经验分位数计算方法
+
+> 第5讲 分位数回归理论与案例
+
+> 第6讲 基于分位数回归的VaR计算
+
+> 第7讲 极值理论原理
+
+> 第8讲 极值理论估计方法
+
+> 第9讲 基于传统极值理论的VaR计算
+
+> 第10讲 基于传统极值理论的VaR讨论
+
+> 第11讲 基于传统极值理论的Return Level计算
+
+> 第12讲 POT极值理论原理
+
+> 第13讲 POT极值理论参数估计
+
+> 第14讲 基于POT极值理论的VaR计算
+
+
+## 第二篇 多元协整(Multicointegration)及向量误差修正模型(VECM)
+
+> 第1讲 伪回归概念及其后果
+
+> 第2讲 协整理论与应用
+
+- 2.1  协整与共同趋势
+
+- 2.2  协整系统模拟
+
+> 第3讲 误差修正模型
+
+> 第4讲 基于残差的协整检验
+
+> 第5讲 基于stock&Waston法的协整向量与ECM估计
+
+> 第6讲 协整VAR相关理论
+
+> 第7讲 Johansen协整检验
+
+> 第8讲 协整检验实例分析
+
+> 第9讲 协整VECM极大似然估计与应用
+
+> 第10讲 用VECM构建交易策略
+
+
+ 
+## 第三篇 自回归条件异方差模型
+
+> 第1讲 介绍ARCH & GARCH
+
+> 第2讲 估计条件均值和方差
+
+> 第3讲 随机过程ARCH(1)
+
+> 第4讲 AR(1)/ARCH(1)模型
+
+> 第5讲 ARCH(p)模型
+
+> 第6讲 $ARIMA(p_A,d,q_A)$/$GARCH(p_G,q_G)$模型
+
+ - 6.1  $ARIMA(p_A,d,q_A)$/$GARCH(p_G,q_G)$模型残差分析
+
+> 第7讲 长尾GARCH模型
+
+> 第8讲 GARCH模型和ARMA模型
+
+> 第9讲 GARCH模型实例
+
+
+## 第四篇 成分分析和因子模型
+
+> 第1讲 降维
+
+> 第2讲 主元分析PCA
+
+> 第3讲 Factor Models
+
+> 第4讲 Fitting Factor Models by Time Series Regression
+
+ - 4.1 Fama and French Three Factor Model
+ 
+ - 4.2 Estimating Expectations and Covariances of Asset Returns
+
+> 第5讲 Cross-Sectional Factor Models
+
+> 第6讲 Statistical Factor Models
+
+ - 6.1 Varimax Rotation of the Factors
+
+> 第7讲 独立成分分析ICA(Independent Component Analysis)
+
+> 第8讲 PCA和ICA的比较
+
